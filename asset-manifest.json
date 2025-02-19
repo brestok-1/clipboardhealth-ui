@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/clipboardhealth-ui/static/css/main.452e8ce6.css",
+    "main.js": "/clipboardhealth-ui/static/js/main.232656c9.js",
+    "index.html": "/clipboardhealth-ui/index.html",
+    "main.452e8ce6.css.map": "/clipboardhealth-ui/static/css/main.452e8ce6.css.map",
+    "main.232656c9.js.map": "/clipboardhealth-ui/static/js/main.232656c9.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.452e8ce6.css",
+    "static/js/main.232656c9.js"
+  ]
+}
