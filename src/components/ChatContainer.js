@@ -2,11 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ContextApp } from '../utils/Context';
 import { LuPanelLeftClose, LuPanelLeftOpen } from 'react-icons/lu';
 import { HiOutlineMenuAlt2 } from 'react-icons/hi';
-import { BsPaperclip } from 'react-icons/bs';
 import { IoArrowUp } from 'react-icons/io5';
 import Chat from './Chat';
 import ChatModelDropdown from './ChatModelDropdown';
-import { AiFillCloseCircle, AiOutlineFullscreenExit } from 'react-icons/ai';
+import { AiFillCloseCircle } from 'react-icons/ai';
 
 function ChatContainer() {
   const {
@@ -28,39 +27,12 @@ function ChatContainer() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [filePreview, setFilePreview] = useState(null); 
 
-  const handleClick = () => {
-    document.getElementById('file-upload').click();
-  };
-
   useEffect(() => {
     if (!fileData) {
       setFilePreview(null);
     }
   }, [fileData]);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      // Если это изображение, показать превью
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-          setFilePreview(e.target.result); // Устанавливаем превью
-
-          // После того как файл прочитан, сохраняем имя и base64-строку
-          setFileData({
-            name: file.name, // Имя файла
-            base64String: e.target.result.split(',')[1], // Содержимое файла в base64
-          });
-        };
-
-        reader.readAsDataURL(file); // Читаем файл как Data URL
-      } else {
-        setFilePreview(null); // Если не изображение, удаляем превью
-      }
-    }
-  };
 
   return (
     <div
@@ -135,19 +107,6 @@ function ChatContainer() {
           
           />
           <div className="m-3 gap-3 flex">
-            <BsPaperclip
-              title="upload image"
-              className={` p-1 rounded-full m text-3xl  bg-black text-white cursor-pointer 
-                        `}
-              onClick={handleClick}
-            />
-            <input
-              id="file-upload"
-              type="file"
-              accept=".jpg, .png"
-              className="hidden"
-              onChange={handleFileChange}
-            />
             <IoArrowUp
               title="send message"
               className={` p-1 rounded-full text-3xl ${

@@ -35,9 +35,8 @@ const AuthPage = () => {
             }
             className="font-semibold text-gray-800 hover:underline dark:text-zinc-200"
           >
-            {isLogin ? 'Sign up' : 'Sign in'}
+            {isLogin ? 'Sign up!' : 'Sign in!'}
           </Link>
-          {' for free.'}
         </p>
       </div>
     </div>

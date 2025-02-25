@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import { ChatModelType } from '../static/enums/ChatModelType';
 
 const ChatModelDropdown = ({ onSelect, onClose }) => {
   const modalRef = useRef();
@@ -25,19 +24,6 @@ const ChatModelDropdown = ({ onSelect, onClose }) => {
       ref={modalRef}
       className="absolute w-full   bg-main-black py-3 z-50 rounded-lg shadow-lg"
     >
-      {Object.entries(ChatModelType).map(([key, value]) => (
-        <div
-          className="text-white px-2 py-1"
-          onClick={() => {
-            onSelect(value);
-            onClose();
-          }}
-          key={key}
-          value={value}
-        >
-          {value}
-        </div>
-      ))}
     </div>
   );
 };

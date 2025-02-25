@@ -112,7 +112,7 @@ function Mobile() {
       if (!token) {
         return { account: null, statusCode: 401 };
       }
-      const response = await createChat(selectedModel, token);
+      const response = await createChat(token);
       if (response.successful) {
         console.log('Chat created:', response);
         setSelectedChat(response.data.id);

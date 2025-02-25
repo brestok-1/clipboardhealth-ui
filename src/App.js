@@ -1,8 +1,18 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {Route, Routes, useNavigate} from 'react-router-dom';
 import AuthPage from './Page/AuthPage';
 import Home from './Page/Home';
+import {useEffect} from "react";
+import Cookies from "js-cookie";
 
 function App() {
+    const navigate = useNavigate();
+    useEffect(() => {
+        const token = Cookies.get('accessToken');
+        if (!token) {
+            navigate('/auth/login');
+        }
+    }, [navigate]);
+
   return (
 
       <Routes>
