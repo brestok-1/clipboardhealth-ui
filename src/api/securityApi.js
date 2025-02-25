@@ -2,6 +2,7 @@ import api from './index';
 
 export const registerUser = async (email, password, code) => {
     try {
+
         const response = await api.post('/api/security/register', {email, password, code});
         if (response.data.successful) {
             return {successful: true, data: response.data};
