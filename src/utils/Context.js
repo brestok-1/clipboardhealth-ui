@@ -16,10 +16,6 @@ const AppContext = ({ children }) => {
     const [fileData, setFileData] = useState(null);
     const [isLoading, setIsLoading] =useState(false);
 
-    useEffect(() => {
-        console.log(fileData);
-    }, [fileData]);
-
     const [selectedChat, setSelectedChat] = useState(null);
     //'674d7f4eed4768a959ab111c'
     const msgEnd = useRef(null);
@@ -35,7 +31,6 @@ const AppContext = ({ children }) => {
 
         if (chatId) {
             const result = await getAllChatMessages(token, chatId);
-            console.log(result);
 
             if (result.data.length > 0) {
                 const formattedMessages = result.data.map((msg) => ({
@@ -54,7 +49,6 @@ const AppContext = ({ children }) => {
         const text = chatValue;
         setChatValue('');
         let fileUrl = null;
-        console.log(fileData)
         setIsLoading(true);
         if (fileData && fileData.base64String) {
             fileUrl = await base64StringToUrl(fileData);
