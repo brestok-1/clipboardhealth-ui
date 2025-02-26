@@ -11,7 +11,7 @@ function App() {
         if (!token) {
             navigate('/auth/login');
         }
-    }, [navigate]);
+    }, []);
 
   return (
 

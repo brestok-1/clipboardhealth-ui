@@ -7,12 +7,11 @@ const AuthPage = () => {
   const navigate = useNavigate();
 
   const handleNavigation = (event, path) => {
-    event.preventDefault(); 
-    navigate(path); 
+    event.preventDefault();
+    navigate(path);
   };
 
   const isLogin = location.pathname === '/auth/login';
-
   return (
     <div className="bg-[#09090b] font-geist h-screen flex flex-col justify-center items-center">
       <div className="xl:w-1/4 sm:w-1/4 md:w-1/2 lg:w-1/3">
