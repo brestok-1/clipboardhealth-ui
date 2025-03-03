@@ -22,7 +22,7 @@ const ChatModelDropdown = ({ onSelect, onClose }) => {
   return (
     <div
       ref={modalRef}
-      className="absolute w-full   bg-main-black py-3 z-50 rounded-lg shadow-lg"
+      className="absolute w-full  bg-main-black py-3 z-50 rounded-lg shadow-lg"
     >
     </div>
   );

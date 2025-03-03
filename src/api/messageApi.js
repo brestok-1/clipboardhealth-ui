@@ -60,22 +60,3 @@ export const getAllChatMessages = async (token, chatId) => {
         return error;
     }
 };
-
-export const base64StringToUrl = async (fileData) => {
-    console.log(fileData)
-    try {
-        const response = await api.post(`/api/message/image`, 
-            fileData,
-        );
-
-        if (response.data.successful) {
-            const result = response.data.data.url;
-            return result;
-        } else {
-            throw new Error(response.data.error);
-        }
-    } catch (error) {
-        console.error('Error convert to url:', error);
-        return error;
-    }
-};

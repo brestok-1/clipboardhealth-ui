@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const AuthPage = () => {
   const location = useLocation();
+
   const navigate = useNavigate();
 
   const handleNavigation = (event, path) => {

@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ContextApp } from '../utils/Context';
-import { LuPanelLeftClose, LuPanelLeftOpen } from 'react-icons/lu';
-import { HiOutlineMenuAlt2 } from 'react-icons/hi';
-import { IoArrowUp } from 'react-icons/io5';
+import React, {useContext, useState} from 'react';
+import {ContextApp} from '../utils/Context';
+import {LuPanelLeftClose, LuPanelLeftOpen} from 'react-icons/lu';
+import {HiOutlineMenuAlt2} from 'react-icons/hi';
+import {IoArrowUp} from 'react-icons/io5';
 import Chat from './Chat';
 import ChatModelDropdown from './ChatModelDropdown';
-import { AiFillCloseCircle } from 'react-icons/ai';
 
 function ChatContainer() {
   const {
@@ -25,14 +24,6 @@ function ChatContainer() {
   } = useContext(ContextApp);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [filePreview, setFilePreview] = useState(null); 
-
-  useEffect(() => {
-    if (!fileData) {
-      setFilePreview(null);
-    }
-  }, [fileData]);
-
 
   return (
     <div
@@ -77,25 +68,6 @@ function ChatContainer() {
 
       {/* chat input section */}
       <div className="self-center h-fit w-[90%] lg:w-2/5 xl:w-1/2 flex rounded-lg shadow-md  items-center bg-main-light-grey justify-center flex-col gap-2 my-2">
-        {fileData && (
-          <div className="relative self-start">
-            <img
-              src={filePreview}
-              alt="Preview"
-              className="border-main-black  border rounded shadow h-14"
-            />
-            <button
-              className="absolute top-0 right-0 text-center text-white w-4 h-4 flex items-center justify-center text-xs"
-              onClick={() => {
-                setFilePreview(null); 
-                setFileData(null); 
-              }}
-              title="Delete"
-            >
-              <AiFillCloseCircle size={20}/>
-            </button>
-          </div>
-        )}
         <span className="w-full flex h-full gap-2 items-end">
           <textarea
             type="text"

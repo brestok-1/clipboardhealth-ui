@@ -1,6 +1,6 @@
 import {createContext, useEffect, useRef, useState} from 'react';
 import Cookies from 'js-cookie';
-import {base64StringToUrl, getAllChatMessages, sendMessage,} from '../api/messageApi';
+import {getAllChatMessages, sendMessage,} from '../api/messageApi';
 import {createChat, getChatById, getChats} from '../api/chatApi';
 
 export const ContextApp = createContext();
@@ -17,7 +17,6 @@ const AppContext = ({ children }) => {
     const [isLoading, setIsLoading] =useState(false);
 
     const [selectedChat, setSelectedChat] = useState(null);
-    //'674d7f4eed4768a959ab111c'
     const msgEnd = useRef(null);
 
     useEffect(() => {
@@ -27,6 +26,7 @@ const AppContext = ({ children }) => {
     }, [message]);
 
     const loadChatMessages = async (chatId) => {
+        console.log(chatId)
         const token = Cookies.get('accessToken');
 
         if (chatId) {
@@ -50,24 +50,11 @@ const AppContext = ({ children }) => {
         setChatValue('');
         let fileUrl = null;
         setIsLoading(true);
-        if (fileData && fileData.base64String) {
-            fileUrl = await base64StringToUrl(fileData);
-            setFileData(null);
- 
-            setMessage((prevMessages) => [
-                ...prevMessages,
-                {
-                    text,
-                    isBot: false,
-                    file: fileUrl,
-                },
-            ]);
-        } else {
-            setMessage((prevMessages) => [
-                ...prevMessages,
-                { text, isBot: false },
-            ]);
-        }
+        setMessage((prevMessages) => [
+            ...prevMessages,
+            {text, isBot: false},
+        ]);
+
         const token = Cookies.get('accessToken');
         if (!selectedChat) {
             try {
@@ -100,7 +87,6 @@ const AppContext = ({ children }) => {
         setIsLoading(false)
     };
 
-    // Enter Click function
     const handleKeyPress = (e) => {
         if(!isLoading) {
         if (e.key === 'Enter') {
@@ -114,13 +100,10 @@ const AppContext = ({ children }) => {
     const selectedChatById = async (chatId) => {
         try {
             const token = Cookies.get('accessToken');
-            if (!token) {
-                console.error('Token not found');
-                return;
-            }
             const chat = await getChatById(chatId, token);
             if (chat) {
                 setSelectedChat(chatId);
+                setMessage([])
                 loadChatMessages(chatId);
             }
         } catch (error) {

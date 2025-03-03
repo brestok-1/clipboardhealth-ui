@@ -15,7 +15,6 @@ function LeftNav() {
   const [newTitle, setNewTitle] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const {
-    selectedModel,
     showSlide,
     getAllChats,
     chats,
@@ -106,15 +105,12 @@ function LeftNav() {
   const handleCreateChat = async () => {
     try {
       const token = Cookies.get('accessToken');
-      if (!token) {
-        return { account: null, statusCode: 401 };
-      }
       const response = await createChat(token);
       if (response.successful) {
         console.log('Chat created:', response);
         setSelectedChat(response.data.id);
         selectedChatById(response.data.id);
-       
+
       } else {
         console.error('Error creating chat:', response.message);
         alert(`Error: ${response.message}`);

@@ -89,9 +89,8 @@ export const createChat = async (token) => {
     const response = await api.post(
       '/api/chat',
       {  },
-      { headers }  // Используем динамически созданные заголовки
+      { headers }
     );
-    console.log(response)
     if (response?.data?.successful) {
       return response.data;
     } else {
