@@ -52,7 +52,7 @@ function App() {
             const intervalId = setInterval(async () => {
                 await refreshToken()
                 await refreshChat()
-            }, 50 * 60 * 1000);
+            }, 51 * 60 * 1000);
             return () => clearInterval(intervalId);
         }, []);
     };
