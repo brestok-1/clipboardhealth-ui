@@ -2,6 +2,7 @@ export const sendMessage = async (
     token,
     chatValue,
     updateMessages,
+    chatId,
 ) => {
     try {
         const headers = {
@@ -18,7 +19,7 @@ export const sendMessage = async (
         };
 
         const response = await fetch(
-            'https://maple-ai-dev.onrender.com/v1/admin/agent/1/search',
+            `https://maple-ai-dev.onrender.com/v1/admin/agent/1/${chatId}/message`,
             {
                 method: 'POST',
                 headers: headers,

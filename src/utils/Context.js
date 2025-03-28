@@ -42,12 +42,14 @@ const AppContext = ({ children }) => {
             {text, isBot: false},
         ]);
         const token = Cookies.get('accessToken');
+        const chatId = Cookies.get('chatId')
         if (!selectedChat) {
             try {
                     await sendMessage(
                         token,
                         text,
                         setMessage,
+                        chatId
                     );
 
             } catch (error) {
@@ -59,6 +61,7 @@ const AppContext = ({ children }) => {
                 selectedChat,
                 text,
                 setMessage,
+                chatId
             );
         }
         setIsLoading(false)

@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 function App() {
 
     async function refreshToken() {
-        const response = await fetch('https://maple-ai-dev.onrender.com/v1/admin/services/login', {
+        const response = await fetch('http://127.0.0.1:8000/v1/admin/services/login', {
             method: 'POST',
             body: JSON.stringify({
                 "email": "maksim.shymanouski@clipboardhealth.com",
@@ -27,11 +27,31 @@ function App() {
         }
     }
 
+    async function refreshChat() {
+        const response = await fetch('https://brestok-cbh-test.hf.space/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'accept': 'application/json'
+            },
+        });
+        if (response.ok) {
+            const data = await response.json();
+            Cookies.set('chatId', data.data.id);
+            return data.text;
+        } else {
+            console.error('Refresh token failed');
+        }
+    }
+
+
     const useTokenRefresh = () => {
         refreshToken()
+        refreshChat()
         useEffect(() => {
             const intervalId = setInterval(async () => {
                 await refreshToken()
+                await refreshChat()
             }, 50 * 60 * 1000);
             return () => clearInterval(intervalId);
         }, []);

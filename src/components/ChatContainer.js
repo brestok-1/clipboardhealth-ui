@@ -41,14 +41,12 @@ function ChatContainer() {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Если это изображение, показать превью
       if (file.type.startsWith('image/')) {
         const reader = new FileReader();
 
         reader.onload = (e) => {
-          setFilePreview(e.target.result); // Устанавливаем превью
+          setFilePreview(e.target.result);
 
-          // После того как файл прочитан, сохраняем имя и base64-строку
           setFileData({
             name: file.name, // Имя файла
             base64String: e.target.result.split(',')[1], // Содержимое файла в base64
