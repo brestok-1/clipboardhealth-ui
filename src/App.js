@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 function App() {
 
     async function refreshToken() {
-        const response = await fetch('http://127.0.0.1:8000/v1/admin/services/login', {
+        const response = await fetch('https://maple-ai-dev.onrender.com/v1/admin/services/login', {
             method: 'POST',
             body: JSON.stringify({
                 "email": "maksim.shymanouski@clipboardhealth.com",
