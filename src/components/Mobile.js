@@ -6,11 +6,9 @@ import { FiMessageSquare, FiMoreHorizontal } from 'react-icons/fi';
 import Cookies from 'js-cookie';
 import { createChat } from '../api/chatApi';
 import ModalMore from './ModalMore';
-import { useNavigate } from 'react-router-dom';
 
 
 function Mobile() {
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [buttonPosition, setButtonPosition] = useState({ bottom: 0, right: 0 });
@@ -32,15 +30,6 @@ function Mobile() {
   const handleSelectChat = (chatId) => {
     selectedChatById(chatId);
   };
-
-  function handleLogout() {
-    setSelectedChat(null);
-    setChats([]);
-    Cookies.remove('accessToken', {
-      path: '/',
-    });
-    navigate('/auth/login');
-  }
 
   const handleOpenModal = (e, chatId) => {
     const buttonRect = e.currentTarget.getBoundingClientRect();
