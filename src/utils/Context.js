@@ -23,7 +23,6 @@ const AppContext = ({ children }) => {
     }, [fileData]);
 
     const [selectedChat, setSelectedChat] = useState(null);
-    //'674d7f4eed4768a959ab111c'
     const msgEnd = useRef(null);
 
     useEffect(() => {

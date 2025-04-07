@@ -27,12 +27,17 @@ function App() {
     }
 
     async function refreshChat() {
-        const response = await fetch('https://brestok-cbh-test.hf.space/api/chat', {
+        const token = Cookies.get('accessToken');
+        const response = await fetch('https://maple-mobile-dev-server.onrender.com/v1/admin/agent/1/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'accept': 'application/json'
+                'accept': 'application/json',
+                "Authorization": `Bearer ${token}`
             },
+            body: JSON.stringify({
+                "chatName": "New Chat"
+            })
         });
         if (response.ok) {
             const data = await response.json();
