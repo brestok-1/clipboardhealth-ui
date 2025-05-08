@@ -32,10 +32,10 @@ const AppContext = ({ children }) => {
         if (chatId) {
             const result = await getAllChatMessages(token, chatId);
 
-            if (result.data.length > 0) {
+            if (result.data?.length > 0) {
                 const formattedMessages = result.data.map((msg) => ({
-                    text: msg.text,
-                    isBot: msg.author === 'assistant',
+                    text: msg.content,
+                    isBot: msg.role === 'ai',
                     file: msg?.fileUrl,
                 }));
 

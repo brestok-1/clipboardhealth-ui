@@ -127,14 +127,14 @@ function LeftNav() {
     <div
       className={
         !showSlide
-          ? 'h-screen bg-main-grey w-[250px] hidden lg:flex items-center justify-between p-2 text-white flex-col translate-x-0'
+          ? 'h-full bg-gray-100 w-[250px] hidden lg:flex items-center justify-between p-2 text-gray-700 flex-col translate-x-0'
           : 'hidden'
       }
     >
       <div className="flex items-center justify-between w-full">
         <span className="text-xl font-semibold">Chatbot</span>
         <button
-          className="rounded px-3 py-[9px] hidden lg:flex items-center justify-center cursor-pointer text-white m-1 hover:bg-gray-600 duration-200"
+          className="rounded px-3 py-[9px] hidden lg:flex items-center justify-center cursor-pointer text-gray-700 m-1 hover:bg-gray-600 duration-200"
           onClick={handleCreateChat}
         >
           <AiOutlinePlus fontSize={16} />
@@ -145,8 +145,8 @@ function LeftNav() {
           chats.map((chat) => (
             <div
               key={chat.id}
-              className={`rounded-lg w-full py-2 px-3 text-xs my-2 flex items-center justify-between cursor-pointer hover:bg-[#212121] transition-all duration-300 overflow-hidden truncate whitespace-nowrap ${
-                chat.id === selectedChat ? 'bg-[#212121]' : ''
+              className={`rounded-lg w-full py-2 px-3 text-xs my-2 flex items-center justify-between cursor-pointer hover:bg-gray-300 transition-all duration-300 overflow-hidden truncate whitespace-nowrap ${
+                chat.id === selectedChat ? 'bg-gray-200' : ''
               }`}
               onClick={() => handleSelectChat(chat.id)}
             >
@@ -154,7 +154,7 @@ function LeftNav() {
                 <div className="flex w-full items-center gap-2">
                   <input
                     type="text"
-                    className="w-full p-2 rounded bg-gray-700 text-white"
+                    className="w-full p-2 rounded bg-gray-400 text-white"
                     value={newTitle}
                     autoFocus
                     onChange={(e) => setNewTitle(e.target.value)}
@@ -175,7 +175,7 @@ function LeftNav() {
                   <button
                     className="ml-auto flex p-2 items-center justify-end"
                     onClick={(e) => {
-                      e.stopPropagation(); // Остановка всплытия события
+                      e.stopPropagation(); 
                       handleOpenModal(e, chat.id);
                     }}
                   >
@@ -191,7 +191,7 @@ function LeftNav() {
       </div>
       <button
         onClick={isLoggedIn ? handleLogout : () => navigate('/auth/login')}
-        className="text-lg font-geist bg-[#212121] duration-300 truncate mb-2 hover:bg-[#2c2b2b] py-3 rounded-lg w-full"
+        className="text-lg font-geist bg-gray-200 duration-300 truncate mb-2 hover:bg-gray-300 py-3 rounded-lg w-full"
       >
         {isLoggedIn ? 'Log Out' : 'Log In'}
       </button>

@@ -21,14 +21,12 @@
 .group h5, 
 .group h6 {
   margin: 1rem 0;
-  color: #f9fafb;
   font-weight: bold;
 }
 
 .group p {
   margin: 0.5rem 0;
   line-height: 1.5;
-  color: #f9fafb;
   font-size: 15px;
 }
 
@@ -48,13 +46,11 @@
   margin: 1rem 0;
   padding-left: 1rem;
   border-left: 4px solid #d1d5db;
-  color: #d1d5db;
   font-style: italic;
 }
 
 .group code {
   background-color: #374151;
-  color: #d1d5db;
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-family: 'Courier New', Courier, monospace;
@@ -62,7 +58,6 @@
 
 .group pre {
   background-color: #1f2937;
-  color: #f9fafb;
   padding: 1rem;
   border-radius: 8px;
   overflow-x: auto;

@@ -18,7 +18,7 @@ export const sendMessage = async (
             text: chatValue,
         };
 
-        const response = await api.post(`/api/message/${chatId}`, body, {headers});
+        const response = await api.post(`/api/agent/${chatId}`, body, {headers});
         if (response.status !== 200) {
             throw new Error('Network response was not ok');
         }
@@ -43,7 +43,7 @@ export const sendMessage = async (
 
 export const getAllChatMessages = async (token, chatId) => {
     try {
-        const response = await api.get(`/api/message/${chatId}/all`, {
+        const response = await api.get(`/api/agent/${chatId}/all`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
