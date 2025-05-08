@@ -10,7 +10,7 @@ import {
 import FiltersComponent from "../components/FiltersComponent";
 import Cards from "../components/Cards";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 10;
 
 const AgentPage = () => {
    const [selectedTab, setSelectedTab] = useState(1);
