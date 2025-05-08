@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { formatDate } from "../utils/formatDate";
 import ReactMarkdown from "react-markdown";
+import { AiOutlinePhone } from 'react-icons/ai';
+
 
 const CallCard = ({ call }) => {
    const [showMore, setShowMore] = useState(false);
@@ -31,13 +33,19 @@ const CallCard = ({ call }) => {
                   </p>
                   <p className="text-sm text-gray-500">
                      <span className="font-semibold">Phone:</span>{" "}
-                     <a className="hover:text-blue-600" href={`tel:${call?.agent?.phone}`}>
+                     <a
+                        className="hover:text-blue-600"
+                        href={`tel:${call?.agent?.phone}`}
+                     >
                         {call?.agent?.phone}
                      </a>
                   </p>
                   <p className="text-sm text-gray-500">
                      <span className="font-semibold">Email:</span>{" "}
-                     <a className="hover:text-blue-600" href={`mailto:${call?.agent?.email}`}>
+                     <a
+                        className="hover:text-blue-600"
+                        href={`mailto:${call?.agent?.email}`}
+                     >
                         {call.agent?.email}
                      </a>
                   </p>
@@ -54,13 +62,19 @@ const CallCard = ({ call }) => {
                   </p>
                   <p className="text-sm text-gray-500">
                      <span className="font-semibold">Phone:</span>{" "}
-                     <a className="hover:text-blue-600" href={`tel:${call.customer?.phone}`}>
+                     <a
+                        className="hover:text-blue-600"
+                        href={`tel:${call.customer?.phone}`}
+                     >
                         {call?.customer?.phone}
                      </a>
                   </p>
                   <p className="text-sm text-gray-500">
                      <span className="font-semibold">Email:</span>{" "}
-                     <a className="hover:text-blue-600" href={`mailto:${call.customer?.email}`}>
+                     <a
+                        className="hover:text-blue-600"
+                        href={`mailto:${call.customer?.email}`}
+                     >
                         {call?.customer?.email}
                      </a>
                   </p>
@@ -86,22 +100,9 @@ const CallCard = ({ call }) => {
                      href={call?.recordingUrl}
                      target="_blank"
                      rel="noopener noreferrer"
-                     className="w-16 h-16 p-4 rounded-full bg-blue-500 text-white flex items-center justify-center hover:bg-blue-600"
+                     className="w-16 h-16 p-4 rounded-full bg-blue-500 rotate-90 text-white flex items-center justify-center hover:bg-blue-600"
                   >
-                     <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-6"
-                     >
-                        <path
-                           strokeLinecap="round"
-                           strokeLinejoin="round"
-                           d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"
-                        />
-                     </svg>
+                    <AiOutlinePhone size={40} />
                   </a>
 
                   <p className="text-gray-500">
@@ -114,7 +115,7 @@ const CallCard = ({ call }) => {
          {showMore && (
             <div className="p-3 border-t mt-5 flex flex-col text-center gap-3 text-sm text-gray-600">
                <p className="text-sm text-gray-700 font-bold mt-5">
-               📊 Talk Time Distribution
+                  📊 Talk Time Distribution
                </p>
                <div className="flex justify-between gap-4">
                   <p className="flex-1 text-sm text-gray-500">
@@ -137,7 +138,7 @@ const CallCard = ({ call }) => {
                   </p>
                </div>
 
-               <p className="text-sm text-gray-700 font-bold mt-3">Sentiment</p>
+               <p className="text-sm text-gray-700 font-bold mt-3">🙂 Sentiment</p>
                <div className="flex justify-between gap-4">
                   <p className="flex-1 text-sm text-gray-500">
                      <span className="font-semibold">Positive:</span>{" "}
@@ -153,10 +154,10 @@ const CallCard = ({ call }) => {
                   </p>
                </div>
 
-               <p className="text-sm text-gray-700 font-bold mt-3">Summary</p>
+               <p className="text-sm text-gray-700 font-bold mt-3">📝 Summary</p>
                <div className="text-start">{call?.summary}</div>
 
-               <p className="text-sm text-gray-700 font-bold">Suggestions</p>
+               <p className="text-sm text-gray-700 font-bold">📈 Suggestions</p>
                <div className="text-start">
                   <ReactMarkdown>{call?.suggestions}</ReactMarkdown>
                </div>

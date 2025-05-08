@@ -27,7 +27,7 @@ function ChatContainer() {
 
   return (
     <div
-      className={`h-full bg-gray-50 flex items-start flex-col p-2
+      className={`h-full bg-gray-100 flex items-start flex-col p-2
         ${showSlide ? ' w-full ' : 'w-full lg:w-[calc(100%-250px)]'}
      `}
     >

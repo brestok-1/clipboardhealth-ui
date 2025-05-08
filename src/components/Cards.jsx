@@ -3,7 +3,6 @@ import CallCard from './CallCard';
 import StatisticCard from './StatisticCard';
 
 const Cards = ({ data, selectedTab }) => {
-  console.log(data)
   if (selectedTab === 1) {
     return (
       <div className="flex flex-col gap-4">

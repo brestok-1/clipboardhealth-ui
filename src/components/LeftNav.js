@@ -127,7 +127,7 @@ function LeftNav() {
     <div
       className={
         !showSlide
-          ? 'h-full bg-gray-100 w-[250px] hidden lg:flex items-center justify-between p-2 text-gray-700 flex-col translate-x-0'
+          ? 'h-full bg-white w-[250px] hidden lg:flex items-center justify-between p-2 text-gray-700 flex-col translate-x-0'
           : 'hidden'
       }
     >

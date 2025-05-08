@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import HeaderComponent from "../components/HeaderComponent";
 import {
    filterCalls,
@@ -19,6 +19,7 @@ const AgentPage = () => {
    const [error, setError] = useState(null);
    const [page, setPage] = useState(0);
    const [totalCount, setTotalCount] = useState(0);
+   const scrollRef = useRef(null);
 
    useEffect(() => {
       setPage(0);
@@ -69,6 +70,7 @@ const AgentPage = () => {
 
    useEffect(() => {
       fetchData(selectedTab, page);
+      scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
    }, [selectedTab, page, filters]);
 
    const handleTabClick = (tab) => {
@@ -97,7 +99,7 @@ const AgentPage = () => {
    );
 
    return (
-      <div className="w-screen h-screen flex flex-col overflow-hidden">
+      <div className="w-screen h-screen flex bg-gray-100 flex-col overflow-hidden">
          <HeaderComponent />
 
          <div className="flex flex-1 p-6 gap-6 overflow-hidden">
@@ -114,8 +116,8 @@ const AgentPage = () => {
                   />
                </div>
 
-               <div className="flex-[9] bg-white overflow-hidden flex flex-col">
-                  <div className="overflow-y-auto relative flex-1">
+               <div className="flex-[9] bg-gray-100 overflow-hidden flex flex-col">
+                  <div className="overflow-y-auto relative flex-1" ref={scrollRef}>
                      {data.length === 0 ? (
                         <div className="text-gray-500 absolute top-1/2 right-1/2 text-xl">
                            No data
