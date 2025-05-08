@@ -9,11 +9,6 @@ const StatisticCard = ({ statistic, isExpanded, onToggleExpand }) => {
    const [data, setData] = useState(null);
 
    useEffect(() => {
-      if (!isExpanded) {
-         setData(null);
-         return;
-      }
-      
       if (isExpanded && !data) {
          const fetchData = async () => {
             try {
@@ -29,7 +24,7 @@ const StatisticCard = ({ statistic, isExpanded, onToggleExpand }) => {
          
          fetchData();
       }
-   }, [isExpanded, statistic.id]);
+   }, [isExpanded, statistic.id, data]);
 
    const periodLabel =
       Object.keys(PeriodType).find(
