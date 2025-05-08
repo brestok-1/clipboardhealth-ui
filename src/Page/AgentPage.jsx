@@ -31,6 +31,8 @@ const AgentPage = () => {
    const fetchData = async (tab, currentPage) => {
       setError(null);
       setIsLoading(true);
+      setExpandedCardId(null);
+      
       try {
          let response;
 
@@ -80,8 +82,11 @@ const AgentPage = () => {
    }, [selectedTab, page, filters]);
 
    const handleTabClick = (tab) => {
-      setSelectedTab(tab);
-      setPage(0);
+      if (selectedTab !== tab) {
+         setSelectedTab(tab);
+         setPage(0);
+         setExpandedCardId(null);
+      }
    };
 
    const handlePreviousPage = () => {
@@ -115,7 +120,6 @@ const AgentPage = () => {
          <HeaderComponent />
 
          <div className="flex flex-col md:flex-row flex-1 p-3 md:p-6 gap-3 md:gap-6 overflow-hidden">
-            {/* Левая панель вкладок (скрыта на мобильных устройствах) */}
             <div className="hidden md:flex w-1/6 border border-gray-300 py-6 px-2 rounded-3xl flex-col items-start gap-2 bg-white shadow">
                {renderTabButton(1, "Calls")}
                {renderTabButton(2, "Statistics")}

@@ -9,6 +9,11 @@ const StatisticCard = ({ statistic, isExpanded, onToggleExpand }) => {
    const [data, setData] = useState(null);
 
    useEffect(() => {
+      if (!isExpanded) {
+         setData(null);
+         return;
+      }
+      
       if (isExpanded && !data) {
          const fetchData = async () => {
             try {
@@ -24,7 +29,7 @@ const StatisticCard = ({ statistic, isExpanded, onToggleExpand }) => {
          
          fetchData();
       }
-   }, [isExpanded, data, statistic.id]);
+   }, [isExpanded, statistic.id]);
 
    const periodLabel =
       Object.keys(PeriodType).find(
@@ -63,6 +68,12 @@ const StatisticCard = ({ statistic, isExpanded, onToggleExpand }) => {
          ))}
       </div>
    );
+
+   const handleToggleClick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onToggleExpand();
+   };
 
    return (
       <div
@@ -145,7 +156,7 @@ const StatisticCard = ({ statistic, isExpanded, onToggleExpand }) => {
             )}
             <div className="flex justify-center mt-2">
                <button
-                  onClick={onToggleExpand}
+                  onClick={handleToggleClick}
                   className="px-8 py-2 rounded-3xl flex items-center border border-gray-300 justify-center hover:bg-gray-100"
                >
                   {isExpanded ? "Hide" : "Statistics"}
