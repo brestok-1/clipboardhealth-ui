@@ -9,6 +9,7 @@ import {
 
 import FiltersComponent from "../components/FiltersComponent";
 import Cards from "../components/Cards";
+import MobileAgentToggle from "../components/MobileAgentToggle";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -20,6 +21,7 @@ const AgentPage = () => {
    const [page, setPage] = useState(0);
    const [totalCount, setTotalCount] = useState(0);
    const [expandedCardId, setExpandedCardId] = useState(null);
+   const [isLoading, setIsLoading] = useState(false);
    const scrollRef = useRef(null);
 
    useEffect(() => {
@@ -28,6 +30,7 @@ const AgentPage = () => {
 
    const fetchData = async (tab, currentPage) => {
       setError(null);
+      setIsLoading(true);
       try {
          let response;
 
@@ -66,6 +69,8 @@ const AgentPage = () => {
          }
       } catch (err) {
          setError(err.message);
+      } finally {
+         setIsLoading(false);
       }
    };
 
@@ -109,24 +114,33 @@ const AgentPage = () => {
       <div className="w-screen h-screen flex bg-gray-100 flex-col overflow-hidden">
          <HeaderComponent />
 
-         <div className="flex flex-1 p-6 gap-6 overflow-hidden">
-            <div className="w-1/6 border border-gray-300 py-6 px-2 rounded-3xl flex flex-col items-start gap-2 bg-white shadow">
+         <div className="flex flex-col md:flex-row flex-1 p-3 md:p-6 gap-3 md:gap-6 overflow-hidden">
+            {/* Левая панель вкладок (скрыта на мобильных устройствах) */}
+            <div className="hidden md:flex w-1/6 border border-gray-300 py-6 px-2 rounded-3xl flex-col items-start gap-2 bg-white shadow">
                {renderTabButton(1, "Calls")}
                {renderTabButton(2, "Statistics")}
             </div>
 
+            {/* Мобильный переключатель вкладок */}
+            <MobileAgentToggle 
+               selectedTab={selectedTab} 
+               handleTabClick={handleTabClick} 
+            />
+
             <div className="flex-1 flex flex-col gap-4 h-full overflow-hidden">
-               <div className="flex-[1] border border-gray-300 rounded-3xl p-4 bg-white shadow flex items-center justify-end">
+               {/* Фильтры */}
+               <div className="border border-gray-300 rounded-3xl p-3 md:p-4 bg-white shadow flex items-center justify-end">
                   <FiltersComponent
                      selectedTab={selectedTab}
                      setFilters={setFilters}
                   />
                </div>
 
+               {/* Основное содержимое */}
                <div className="flex-[9] bg-gray-100 overflow-hidden flex flex-col">
                   <div className="overflow-y-auto relative flex-1" ref={scrollRef}>
-                     {data.length === 0 ? (
-                        <div className="text-gray-500 absolute top-1/2 right-1/2 text-xl">
+                     {!isLoading && data.length === 0 ? (
+                        <div className="text-gray-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl text-center">
                            No data
                         </div>
                      ) : (
@@ -135,11 +149,14 @@ const AgentPage = () => {
                            selectedTab={selectedTab} 
                            expandedCardId={expandedCardId}
                            setExpandedCardId={setExpandedCardId}
+                           isLoading={isLoading}
                         />
                      )}
                   </div>
-                  {data.length > 0 && (
-                     <div className="flex justify-between items-center border-t">
+                  
+                  {/* Пагинация */}
+                  {!isLoading && data.length > 0 && (
+                     <div className="flex justify-between items-center border-t py-2">
                         <button
                            onClick={handlePreviousPage}
                            disabled={page === 0}
@@ -151,7 +168,7 @@ const AgentPage = () => {
                               viewBox="0 0 24 24"
                               strokeWidth={2}
                               stroke="currentColor"
-                              className="w-8 h-8 text-blue-900"
+                              className="w-6 h-6 md:w-8 md:h-8 text-blue-900"
                            >
                               <path
                                  strokeLinecap="round"
@@ -160,7 +177,7 @@ const AgentPage = () => {
                               />
                            </svg>
                         </button>
-                        <span className="text-lg font-medium">
+                        <span className="text-base md:text-lg font-medium">
                            {page + 1} / {Math.ceil(totalCount / ITEMS_PER_PAGE)}
                         </span>
                         <button
@@ -176,7 +193,7 @@ const AgentPage = () => {
                               viewBox="0 0 24 24"
                               strokeWidth={2}
                               stroke="currentColor"
-                              className="w-8 h-8 text-blue-900"
+                              className="w-6 h-6 md:w-8 md:h-8 text-blue-900"
                            >
                               <path
                                  strokeLinecap="round"

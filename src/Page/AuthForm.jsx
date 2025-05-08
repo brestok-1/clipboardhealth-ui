@@ -84,7 +84,7 @@ const AuthForm = ({ isLogin }) => {
       <form onSubmit={handleSubmit} className="flex flex-col px-8">
         <div className="flex flex-col gap-1">
           {/* Email Label */}
-          <label htmlFor="email" className="text-[#b2b2b6] text-sm">
+          <label htmlFor="email" className="text-gray-700 text-sm">
             Email Address
           </label>
           <input
@@ -95,17 +95,15 @@ const AuthForm = ({ isLogin }) => {
               autoFocus
               onChange={(e) => setEmail(e.target.value)}
               placeholder="user@acme.com"
-              className={`bg-[#272729] ${
-                  email ? 'bg-[#232938]' : ''
-              } text-white p-2.5 rounded-md text-sm w-full ${
-                  errors.email || error ? 'bg-red-500 bg-opacity-30' : 'bg-[#232938]'
-              } focus:bg-[#232938] focus:outline-none mb-4`}
+              className={`bg-white border ${
+                  errors.email || error ? 'border-red-500' : 'border-gray-300'
+              } text-gray-800 p-2.5 rounded-md text-sm w-full focus:border-blue-500 focus:outline-none mb-4`}
           />
         </div>
 
         <div className="flex flex-col gap-1">
           {/* Password Label */}
-          <label htmlFor="password" className="text-[#b2b2b6] text-sm">
+          <label htmlFor="password" className="text-gray-700 text-sm">
             Password
           </label>
           <input
@@ -113,39 +111,31 @@ const AuthForm = ({ isLogin }) => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`bg-[#272729] ${
-                  password ? 'bg-[#232938]' : ''
-              } text-white p-2.5 rounded-md text-sm w-full ${
-                  errors.password || error
-                      ? 'bg-red-500 bg-opacity-30'
-                      : 'bg-[#232938]'
-              } focus:bg-[#232938] focus:outline-none mb-2`}
+              className={`bg-white border ${
+                  errors.password || error ? 'border-red-500' : 'border-gray-300'
+              } text-gray-800 p-2.5 rounded-md text-sm w-full focus:border-blue-500 focus:outline-none mb-2`}
           />
         </div>
 
         {!isLogin ? <div className="flex flex-col gap-1">
           {/* Code Label */}
-          <label htmlFor="code" className="text-[#b2b2b6] text-sm">
+          <label htmlFor="code" className="text-gray-700 text-sm">
             Code
           </label>
           <input
               id="code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className={`bg-[#272729] ${
-                  code ? 'bg-[#232938]' : ''
-              } text-white p-2.5 rounded-md text-sm w-full ${
-                  errors.code || error
-                      ? 'bg-red-500 bg-opacity-30'
-                      : 'bg-[#232938]'
-              } focus:bg-[#232938] focus:outline-none mb-2`}
+              className={`bg-white border ${
+                  errors.code || error ? 'border-red-500' : 'border-gray-300'
+              } text-gray-800 p-2.5 rounded-md text-sm w-full focus:border-blue-500 focus:outline-none mb-2`}
           />
         </div> : ''}
 
         {/* Submit Button */}
         <button
             type="submit"
-            className="mt-2 py-2.5 bg-[#00407d] hover:bg-[#00417deb] text-sm text-white font-bold rounded-md transition"
+            className="mt-2 py-2.5 bg-blue-600 hover:bg-blue-700 text-sm text-white font-bold rounded-md transition"
         >
           {isLogin ? 'Sign In' : 'Sign Up'}
         </button>

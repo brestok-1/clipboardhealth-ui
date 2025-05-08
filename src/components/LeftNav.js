@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import { createChat, deleteChat, updateTitle } from '../api/chatApi';
 import ModalMore from './ModalMore';
 import { useNavigate } from 'react-router-dom';
+import ChatListSkeleton from './ChatListSkeleton';
 
 function LeftNav() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ function LeftNav() {
     selectedChat,
     selectedChatById,
     loadChatMessages,
+    isLoadingChats,
   } = useContext(ContextApp);
 
   const handleSelectChat = (chatId) => {
@@ -41,8 +43,8 @@ function LeftNav() {
   const handleOpenModal = (e, chatId) => {
     const buttonRect = e.currentTarget.getBoundingClientRect();
     setButtonPosition({
-      top: buttonRect.bottom + window.scrollY,
-      left: buttonRect.left + window.scrollX,
+      top: buttonRect.top,
+      left: buttonRect.left,
     });
     setIsModalOpen(true);
     setSelectedChatId(chatId);
@@ -123,6 +125,60 @@ function LeftNav() {
 
   const isLoggedIn = !!Cookies.get('accessToken');
 
+  const renderChatList = () => {
+    if (isLoadingChats) {
+      return <ChatListSkeleton />;
+    }
+    
+    if (chats && chats.length > 0) {
+      return chats.map((chat) => (
+        <div
+          key={chat.id}
+          className={`rounded-lg w-full py-2 px-3 text-xs my-2 flex items-center justify-between cursor-pointer hover:bg-gray-300 transition-all duration-300 overflow-hidden truncate whitespace-nowrap ${
+            chat.id === selectedChat ? 'bg-gray-200' : ''
+          }`}
+          onClick={() => handleSelectChat(chat.id)}
+        >
+          {selectedChatId === chat.id && isEditing ? (
+            <div className="flex w-full items-center gap-2">
+              <input
+                type="text"
+                className="w-full p-2 rounded bg-white border border-gray-300 text-gray-800"
+                value={newTitle}
+                autoFocus
+                onChange={(e) => setNewTitle(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSaveTitle();
+                  }
+                }}
+                onBlur={handleSaveTitle}
+              />
+            </div>
+          ) : (
+            <div className="flex justify-between w-full">
+              <div className="flex items-center gap-3">
+                <FiMessageSquare fontSize={20} />
+                <span className="text-base">{chat.title}</span>
+              </div>
+              <button
+                className="ml-auto flex p-2 items-center justify-end"
+                onClick={(e) => {
+                  e.stopPropagation(); 
+                  handleOpenModal(e, chat.id);
+                }}
+              >
+                <FiMoreHorizontal fontSize={20} />
+              </button>
+            </div>
+          )}
+        </div>
+      ));
+    }
+    
+    return <p>No chats available</p>;
+  };
+
   return (
     <div
       className={
@@ -134,60 +190,14 @@ function LeftNav() {
       <div className="flex items-center justify-between w-full">
         <span className="text-xl font-semibold">Chatbot</span>
         <button
-          className="rounded px-3 py-[9px] hidden lg:flex items-center justify-center cursor-pointer text-gray-700 m-1 hover:bg-gray-600 duration-200"
+          className="rounded px-3 py-[9px] hidden lg:flex items-center justify-center cursor-pointer text-gray-700 m-1 hover:bg-gray-100 duration-200"
           onClick={handleCreateChat}
         >
           <AiOutlinePlus fontSize={16} />
         </button>
       </div>
       <div className="h-full w-full p-2 flex items-start justify-start flex-col overflow-hidden overflow-y-auto text-sm scroll my-2">
-        {chats && chats.length > 0 ? (
-          chats.map((chat) => (
-            <div
-              key={chat.id}
-              className={`rounded-lg w-full py-2 px-3 text-xs my-2 flex items-center justify-between cursor-pointer hover:bg-gray-300 transition-all duration-300 overflow-hidden truncate whitespace-nowrap ${
-                chat.id === selectedChat ? 'bg-gray-200' : ''
-              }`}
-              onClick={() => handleSelectChat(chat.id)}
-            >
-              {selectedChatId === chat.id && isEditing ? (
-                <div className="flex w-full items-center gap-2">
-                  <input
-                    type="text"
-                    className="w-full p-2 rounded bg-gray-400 text-white"
-                    value={newTitle}
-                    autoFocus
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        handleSaveTitle();
-                      }
-                    }}
-                    onBlur={handleSaveTitle}
-                  />
-                </div>
-              ) : (
-                <div className="flex justify-between w-full">
-                  <div className="flex items-center gap-3">
-                    <FiMessageSquare fontSize={20} />
-                    <span className="text-base">{chat.title}</span>
-                  </div>
-                  <button
-                    className="ml-auto flex p-2 items-center justify-end"
-                    onClick={(e) => {
-                      e.stopPropagation(); 
-                      handleOpenModal(e, chat.id);
-                    }}
-                  >
-                    <FiMoreHorizontal fontSize={20} />
-                  </button>
-                </div>
-              )}
-            </div>
-          ))
-        ) : (
-          <p>No chats available</p>
-        )}
+        {renderChatList()}
       </div>
       <button
         onClick={isLoggedIn ? handleLogout : () => navigate('/auth/login')}

@@ -1,8 +1,34 @@
 import React from 'react';
 import CallCard from './CallCard';
 import StatisticCard from './StatisticCard';
+import CallCardSkeleton from './CallCardSkeleton';
+import StatisticCardSkeleton from './StatisticCardSkeleton';
 
-const Cards = ({ data, selectedTab, expandedCardId, setExpandedCardId }) => {
+const Cards = ({ data, selectedTab, expandedCardId, setExpandedCardId, isLoading }) => {
+  if (isLoading) {
+    // Показываем скелетоны загрузки
+    const skeletons = Array(5).fill(0);
+    
+    if (selectedTab === 1) {
+      return (
+        <div className="flex flex-col gap-4">
+          {skeletons.map((_, index) => (
+            <CallCardSkeleton key={index} />
+          ))}
+        </div>
+      );
+    } else if (selectedTab === 2) {
+      return (
+        <div className="flex flex-col gap-4">
+          {skeletons.map((_, index) => (
+            <StatisticCardSkeleton key={index} />
+          ))}
+        </div>
+      );
+    }
+  }
+  
+  // Показываем реальные данные, когда они загружены
   if (selectedTab === 1) {
     return (
       <div className="flex flex-col gap-4">

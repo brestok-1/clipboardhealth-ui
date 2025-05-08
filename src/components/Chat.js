@@ -2,14 +2,19 @@ import React, {useContext, useEffect} from 'react';
 import {ContextApp} from '../utils/Context';
 import ReactMarkdown from 'react-markdown';
 import {AiOutlineUser} from 'react-icons/ai';
+import ChatSkeleton from './ChatSkeleton';
 
 function Chat() {
-    const { message, msgEnd } = useContext(ContextApp);
+    const { message, msgEnd, isLoadingMessages } = useContext(ContextApp);
 
     useEffect(() => {
         msgEnd?.current?.scrollIntoView({ behavior: 'smooth' });
-      }, [message]);
+      }, [message, msgEnd]);
       
+    if (isLoadingMessages) {
+        return <ChatSkeleton />;
+    }
+    
     return (
         <div className=' w-full flex items-center justify-center overflow-hidden overflow-y-auto px-2 py-1 scroll'>
             <div className='w-full lg:w-4/5 flex flex-col h-full items-start justify-start'>

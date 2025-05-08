@@ -22,7 +22,8 @@ const CallCard = ({ call, isExpanded, onToggleExpand }) => {
                <p>{formatDate(call.datetimeInserted)}</p>
             </div>
 
-            <div className="flex gap-8">
+            {/* Desktop layout */}
+            <div className="hidden md:flex gap-8">
                <div className="flex flex-col gap-2 flex-[2]">
                   <p className="text-sm text-gray-700 font-bold">👥 From:</p>
                   <p className="text-sm text-gray-500">
@@ -109,26 +110,113 @@ const CallCard = ({ call, isExpanded, onToggleExpand }) => {
                   </p>
                </div>
             </div>
+
+            {/* Mobile layout */}
+            <div className="flex flex-col md:hidden gap-4">
+               {/* Agent info (From) */}
+               <div className="border-b pb-3">
+                  <p className="text-sm text-gray-700 font-bold mb-2">👥 From:</p>
+                  <div className="grid grid-cols-1 gap-1">
+                     <p className="text-sm text-gray-500">
+                        <span className="font-semibold">Name:</span>{" "}
+                        {call?.agent?.name || "N/A"}
+                     </p>
+                     <p className="text-sm text-gray-500">
+                        <span className="font-semibold">Phone:</span>{" "}
+                        <a className="hover:text-blue-600" href={`tel:${call?.agent?.phone}`}>
+                           {call?.agent?.phone}
+                        </a>
+                     </p>
+                     <p className="text-sm text-gray-500">
+                        <span className="font-semibold">Email:</span>{" "}
+                        <a className="hover:text-blue-600" href={`mailto:${call?.agent?.email}`}>
+                           {call.agent?.email}
+                        </a>
+                     </p>
+                     <p className="text-sm text-gray-500">
+                        <span className="font-semibold">Job Role:</span>{" "}
+                        {call?.agent?.jobRole}
+                     </p>
+                  </div>
+               </div>
+               
+               {/* Customer info (To) */}
+               <div className="border-b pb-3">
+                  <p className="text-sm text-gray-700 font-bold mb-2">👥 To:</p>
+                  <div className="grid grid-cols-1 gap-1">
+                     <p className="text-sm text-gray-500">
+                        <span className="font-semibold">Name:</span>{" "}
+                        {call?.customer?.name}
+                     </p>
+                     <p className="text-sm text-gray-500">
+                        <span className="font-semibold">Phone:</span>{" "}
+                        <a className="hover:text-blue-600" href={`tel:${call.customer?.phone}`}>
+                           {call?.customer?.phone}
+                        </a>
+                     </p>
+                     <p className="text-sm text-gray-500">
+                        <span className="font-semibold">Email:</span>{" "}
+                        <a className="hover:text-blue-600" href={`mailto:${call.customer?.email}`}>
+                           {call?.customer?.email}
+                        </a>
+                     </p>
+                     <p className="text-sm text-gray-500">
+                        <span className="font-semibold">Company:</span>{" "}
+                        {call?.customer?.company}
+                     </p>
+                     <p className="text-sm text-gray-500">
+                        <span className="font-semibold">Website:</span>{" "}
+                        <a
+                           href={call.customer?.website}
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           className="hover:text-blue-600"
+                        >
+                           {call?.customer?.website}
+                        </a>
+                     </p>
+                  </div>
+               </div>
+               
+               {/* Recording & Duration */}
+               <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                     <a
+                        href={call?.recordingUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-12 h-12 p-3 rounded-full bg-blue-500 rotate-90 text-white flex items-center justify-center hover:bg-blue-600"
+                     >
+                       <AiOutlinePhone size={24} />
+                     </a>
+                     <span className="text-blue-600 font-semibold">Recording</span>
+                  </div>
+                  <p className="text-gray-500">
+                     <span className="font-semibold">Duration: </span>
+                     {Math.floor(call?.duration / 60)}m {call?.duration % 60}s
+                  </p>
+               </div>
+            </div>
          </div>
          {isExpanded && (
             <div className="p-3 border-t mt-5 flex flex-col text-center gap-3 text-sm text-gray-600">
                <p className="text-sm text-gray-700 font-bold mt-5">
                   📊 Talk Time Distribution
                </p>
-               <div className="flex justify-between gap-4">
-                  <p className="flex-1 text-sm text-gray-500">
+               <div className="flex flex-wrap md:flex-nowrap justify-between gap-4">
+                  <p className="flex-1 text-sm text-gray-500 min-w-[100px]">
                      <span className="font-semibold">Agent:</span>{" "}
                      {timeDistributionsByType[1] != null
                         ? `${timeDistributionsByType[1]}%`
                         : "-"}
                   </p>
-                  <p className="flex-1 text-sm text-gray-500">
+                  <p className="flex-1 text-sm text-gray-500 min-w-[100px]">
                      <span className="font-semibold">Customer:</span>{" "}
                      {timeDistributionsByType[2] != null
                         ? `${timeDistributionsByType[2]}%`
                         : "-"}
                   </p>
-                  <p className="flex-1 text-sm text-gray-500">
+                  <p className="flex-1 text-sm text-gray-500 min-w-[100px]">
                      <span className="font-semibold">Other:</span>{" "}
                      {timeDistributionsByType[3] != null
                         ? `${timeDistributionsByType[3]}%`
@@ -137,16 +225,16 @@ const CallCard = ({ call, isExpanded, onToggleExpand }) => {
                </div>
 
                <p className="text-sm text-gray-700 font-bold mt-3">🙂 Sentiment</p>
-               <div className="flex justify-between gap-4">
-                  <p className="flex-1 text-sm text-gray-500">
+               <div className="flex flex-wrap md:flex-nowrap justify-between gap-4">
+                  <p className="flex-1 text-sm text-gray-500 min-w-[100px]">
                      <span className="font-semibold">Positive:</span>{" "}
                      {call?.sentiment?.Positive}%
                   </p>
-                  <p className="flex-1 text-sm text-gray-500">
+                  <p className="flex-1 text-sm text-gray-500 min-w-[100px]">
                      <span className="font-semibold">Neutral:</span>{" "}
                      {call?.sentiment?.Neutral}%
                   </p>
-                  <p className="flex-1 text-sm text-gray-500">
+                  <p className="flex-1 text-sm text-gray-500 min-w-[100px]">
                      <span className="font-semibold">Negative:</span>{" "}
                      {call?.sentiment?.Negative}%
                   </p>

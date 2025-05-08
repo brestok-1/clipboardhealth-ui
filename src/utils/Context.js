@@ -15,6 +15,8 @@ const AppContext = ({ children }) => {
     const [message, setMessage] = useState([]);
     const [fileData, setFileData] = useState(null);
     const [isLoading, setIsLoading] =useState(false);
+    const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+    const [isLoadingChats, setIsLoadingChats] = useState(false);
 
     const [selectedChat, setSelectedChat] = useState(null);
     const msgEnd = useRef(null);
@@ -28,18 +30,29 @@ const AppContext = ({ children }) => {
     const loadChatMessages = async (chatId) => {
         console.log(chatId)
         const token = Cookies.get('accessToken');
-
+        
         if (chatId) {
-            const result = await getAllChatMessages(token, chatId);
+            setIsLoadingMessages(true);
+            
+            try {
+                const result = await getAllChatMessages(token, chatId);
 
-            if (result.data?.length > 0) {
-                const formattedMessages = result.data.map((msg) => ({
-                    text: msg.content,
-                    isBot: msg.role === 'ai',
-                    file: msg?.fileUrl,
-                }));
+                if (result.data?.length > 0) {
+                    const formattedMessages = result.data.map((msg) => ({
+                        text: msg.content,
+                        isBot: msg.role === 'ai',
+                        file: msg?.fileUrl,
+                    }));
 
-                setMessage(formattedMessages);
+                    setMessage(formattedMessages);
+                } else {
+                    setMessage([]);
+                }
+            } catch (error) {
+                console.error("Error loading chat messages:", error);
+                setMessage([]);
+            } finally {
+                setIsLoadingMessages(false);
             }
         }
     };
@@ -113,6 +126,7 @@ const AppContext = ({ children }) => {
 
     const getAllChats = async () => {
         try {
+            setIsLoadingChats(true);
             const token = Cookies.get('accessToken');
             if (!token) {
                 return { account: null, statusCode: 401 };
@@ -125,6 +139,8 @@ const AppContext = ({ children }) => {
             }
         } catch (error) {
             console.log(error.message || 'Error creating chat');
+        } finally {
+            setIsLoadingChats(false);
         }
     };
 
@@ -158,7 +174,9 @@ const AppContext = ({ children }) => {
                 getAllChats,
                 setChats,
                 fileData,
-                isLoading
+                isLoading,
+                isLoadingMessages,
+                isLoadingChats
             }}
         >
             {children}

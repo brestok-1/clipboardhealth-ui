@@ -34,13 +34,13 @@ const ModalMore = ({ isOpen, onClose, onRename, onDelete, position }) => {
     >
       <div
         ref={modalRef}
-        className="bg-[#272729] rounded-xl border border-[#49494d] p-3 w-40"
+        className="bg-white rounded-xl border border-gray-200 p-3 w-40 shadow-md"
       >
         <ul className="space-y-2">
           <li>
             <button
               onClick={onRename}
-              className="w-full py-3 gap-5 px-5 text-sm flex text-center hover:bg-[#424242] rounded-lg"
+              className="w-full py-3 gap-5 px-5 text-sm flex text-center hover:bg-gray-100 rounded-lg text-gray-700"
             >
               <FiEdit2 fontSize={18} />
               Rename
@@ -49,7 +49,7 @@ const ModalMore = ({ isOpen, onClose, onRename, onDelete, position }) => {
           <li>
             <button
               onClick={onDelete}
-              className="w-full py-3 px-5 gap-5 text-center flex text-sm text-red-600 hover:bg-[#424242] rounded-lg"
+              className="w-full py-3 px-5 gap-5 text-center flex text-sm text-red-600 hover:bg-gray-100 rounded-lg"
             >
               <FiTrash2 fontSize={18} />
               Delete

@@ -12,6 +12,14 @@ module.exports = {
                 'main-grey': '#19191b',
                 'main-light-grey': '#272729',
             },
+            animation: {
+                'shimmer': 'shimmer 1.5s infinite',
+            },
+            keyframes: {
+                shimmer: {
+                    '100%': { transform: 'translateX(100%)' },
+                },
+            },
         },
     },
     plugins: [],

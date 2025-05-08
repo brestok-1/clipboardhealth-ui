@@ -7,11 +7,11 @@
 }
 
 .scroll::-webkit-scrollbar-track {
-  background: #30303000; /* color of the tracking area */
+  background: #f1f5f9; /* color of the tracking area */
 }
 
 .scroll::-webkit-scrollbar-thumb {
-  background-color: rgb(70, 70, 70); /* color of the scroll thumb */
+  background-color: #cbd5e1; /* color of the scroll thumb */
   border-radius: 8px; /* roundness of the scroll thumb */
 }
 .group h1, 
@@ -50,18 +50,20 @@
 }
 
 .group code {
-  background-color: #374151;
+  background-color: #f1f5f9;
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-family: 'Courier New', Courier, monospace;
+  color: #334155;
 }
 
 .group pre {
-  background-color: #1f2937;
+  background-color: #f8fafc;
   padding: 1rem;
   border-radius: 8px;
   overflow-x: auto;
   font-family: 'Courier New', Courier, monospace;
+  border: 1px solid #e2e8f0;
 }
 
 .group a {
@@ -77,6 +79,6 @@
 
 .group hr {
   border: 0;
-  border-top: 1px solid #374151;
+  border-top: 1px solid #e2e8f0;
   margin: 1rem 0;
 }
