@@ -10,6 +10,8 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
    const [agents, setAgents] = useState([]);
    const [selectedAgentId, setSelectedAgentId] = useState("");
    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+   const [searchTerm, setSearchTerm] = useState("");
+   const [filteredAgents, setFilteredAgents] = useState([]);
 
    useEffect(() => {
       const fetchAgents = async () => {
@@ -17,6 +19,7 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
             const res = await getAllAgents();
             if (res.statusCode === 200 && res.data) {
                setAgents(res.data);
+               setFilteredAgents(res.data);
             }
          } catch (error) {
             console.error("Error fetching agents:", error);
@@ -28,8 +31,20 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
       setSelectedAgentId("");
       setSelectedPeriod("");
       setStartDate("");
+      setSearchTerm("");
       setFilters([]);
    }, [selectedTab]);
+
+   useEffect(() => {
+      if (searchTerm.trim() === "") {
+         setFilteredAgents(agents);
+      } else {
+         const filtered = agents.filter(agent => 
+            agent.name.toLowerCase().includes(searchTerm.toLowerCase())
+         );
+         setFilteredAgents(filtered);
+      }
+   }, [searchTerm, agents]);
 
    const onFilterChange = (newFilters) => {
       const filters = [];
@@ -53,6 +68,7 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
    const handleSelectAgent = (id) => {
       setSelectedAgentId(id);
       setIsDropdownOpen(false);
+      setSearchTerm("");
       onFilterChange({ agentId: id, startDate, period: selectedPeriod });
    };
 
@@ -71,6 +87,10 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
            ([label, value]) => value === selectedPeriod
         )?.[0]
       : "";
+
+   const handleAgentSearch = (e) => {
+      setSearchTerm(e.target.value);
+   };
 
    return (
       <div className="flex gap-4 w-1/3">
@@ -101,31 +121,38 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="max-w-[170px] w-full py-2 px-4 text-center rounded-2xl overflow-hidden bg-blue-100 hover:bg-gray-200 text-gray-400 outline-none whitespace-nowrap text-ellipsis"
-
                >
                   {selectedAgentId ? `${selectedAgentName}` : "Select Agent"}
                </button>
                {isDropdownOpen && (
-                  <ul
-                     className="absolute w-full max-h-48 overflow-y-auto bg-white border rounded-2xl shadow-md"
-                     style={{ zIndex: 1000 }}
-                  >
-                     <li
-                        onClick={() => handleSelectAgent("")}
-                        className="py-2 px-4 hover:bg-gray-200"
-                     >
-                        Select Agent
-                     </li>
-                     {agents.map((agent) => (
-                        <li
-                           key={agent.id}
-                           onClick={() => handleSelectAgent(agent.id)}
-                           className="py-2 px-4 hover:bg-gray-200"
-                        >
-                           {agent.name}
-                        </li>
-                     ))}
-                  </ul>
+                  <div className="absolute w-full bg-white border rounded-2xl shadow-md" style={{ zIndex: 1000 }}>
+                     <div className="p-2">
+                        <input
+                           type="text"
+                           value={searchTerm}
+                           onChange={handleAgentSearch}
+                           placeholder="Search agent..."
+                           className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+                           autoFocus
+                        />
+                     </div>
+                     <ul className="max-h-48 overflow-y-auto">
+                        {filteredAgents.map((agent) => (
+                           <li
+                              key={agent.id}
+                              onClick={() => handleSelectAgent(agent.id)}
+                              className="py-2 px-4 hover:bg-gray-200 cursor-pointer"
+                           >
+                              {agent.name}
+                           </li>
+                        ))}
+                        {filteredAgents.length === 0 && (
+                           <li className="py-2 px-4 text-gray-500 italic">
+                              No agents found
+                           </li>
+                        )}
+                     </ul>
+                  </div>
                )}
             </div>
          ) : (
@@ -143,7 +170,7 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                   >
                      <li
                         onClick={() => handleSelectPeriod("")}
-                        className="py-2 px-4 hover:bg-gray-200"
+                        className="py-2 px-4 hover:bg-gray-200 cursor-pointer"
                      >
                         Select Period
                      </li>
@@ -151,7 +178,7 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                         <li
                            key={value}
                            onClick={() => handleSelectPeriod(value)}
-                           className="py-2 px-4 hover:bg-gray-200"
+                           className="py-2 px-4 hover:bg-gray-200 cursor-pointer"
                         >
                            {label}
                         </li>
@@ -165,6 +192,7 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                setStartDate(null);
                setSelectedAgentId("");
                setSelectedPeriod("");
+               setSearchTerm("");
                setFilters([]);
             }}
             className="text-black rounded-2xl"
