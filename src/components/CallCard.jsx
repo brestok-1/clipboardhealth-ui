@@ -1,13 +1,11 @@
 // CallCard.jsx
-import React, { useState } from "react";
+import React from "react";
 import { formatDate } from "../utils/formatDate";
 import ReactMarkdown from "react-markdown";
 import { AiOutlinePhone } from 'react-icons/ai';
 
 
-const CallCard = ({ call }) => {
-   const [showMore, setShowMore] = useState(false);
-
+const CallCard = ({ call, isExpanded, onToggleExpand }) => {
    const timeDistributionsByType =
       call?.timeDistributions?.reduce((acc, dist) => {
          acc[dist.type] = dist.value;
@@ -112,7 +110,7 @@ const CallCard = ({ call }) => {
                </div>
             </div>
          </div>
-         {showMore && (
+         {isExpanded && (
             <div className="p-3 border-t mt-5 flex flex-col text-center gap-3 text-sm text-gray-600">
                <p className="text-sm text-gray-700 font-bold mt-5">
                   📊 Talk Time Distribution
@@ -166,10 +164,10 @@ const CallCard = ({ call }) => {
 
          <div className="flex justify-center mt-6">
             <button
-               onClick={() => setShowMore(!showMore)}
+               onClick={onToggleExpand}
                className="px-8 py-2 rounded-3xl flex items-center border border-gray-300 justify-center hover:bg-gray-100"
             >
-               {showMore ? "Hide" : "AI Analysis"}
+               {isExpanded ? "Hide" : "AI Analysis"}
             </button>
          </div>
       </div>

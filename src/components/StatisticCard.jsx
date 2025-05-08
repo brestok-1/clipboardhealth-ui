@@ -1,33 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { formatDate } from "../utils/formatDate";
 import { PeriodType } from "../static/enums/PeriodType";
 import { getStatisticById } from "../api/agentApi";
 import { StatisticsType } from "../static/enums/StatisticsType";
 
-const StatisticCard = ({ statistic }) => {
+const StatisticCard = ({ statistic, isExpanded, onToggleExpand }) => {
    const [loading, setLoading] = useState(false);
    const [data, setData] = useState(null);
-   const [showData, setShowData] = useState(false);
+
+   useEffect(() => {
+      if (isExpanded && !data) {
+         const fetchData = async () => {
+            try {
+               setLoading(true);
+               const response = await getStatisticById(statistic.id);
+               setData(response.data);
+            } catch (error) {
+               console.error("Error fetching statistic by ID:", error);
+            } finally {
+               setLoading(false);
+            }
+         };
+         
+         fetchData();
+      }
+   }, [isExpanded, data, statistic.id]);
 
    const periodLabel =
       Object.keys(PeriodType).find(
          (key) => PeriodType[key] === statistic.type
       ) || "-";
-
-   const handleClick = async () => {
-      if (!showData && !data) {
-         try {
-            setLoading(true);
-            const response = await getStatisticById(statistic.id);
-            setData(response.data);
-         } catch (error) {
-            console.error("Error fetching statistic by ID:", error);
-         } finally {
-            setLoading(false);
-         }
-      }
-      setShowData((prev) => !prev);
-   };
 
    const getEmojisByType = (type) => {
       if ([1, 2].includes(type)) {
@@ -53,7 +55,7 @@ const StatisticCard = ({ statistic }) => {
                Type: <strong>{periodLabel}</strong>
             </p>
 
-            {showData && data?.statistics && (
+            {isExpanded && data?.statistics && (
                <div className="flex flex-col gap-2">
                   {data.statistics.map((stat, index) => {
                      const statisticsTypeLabel =
@@ -107,10 +109,10 @@ const StatisticCard = ({ statistic }) => {
             )}
             <div className="flex justify-center">
                <button
-                  onClick={handleClick}
+                  onClick={onToggleExpand}
                   className="px-8 py-2 rounded-3xl flex items-center border border-gray-300 justify-center hover:bg-gray-100"
                >
-                  {showData ? "Hide" : "Statistics"}
+                  {isExpanded ? "Hide" : "Statistics"}
                </button>
             </div>
          </div>

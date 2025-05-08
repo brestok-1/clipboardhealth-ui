@@ -19,6 +19,7 @@ const AgentPage = () => {
    const [error, setError] = useState(null);
    const [page, setPage] = useState(0);
    const [totalCount, setTotalCount] = useState(0);
+   const [expandedCardId, setExpandedCardId] = useState(null);
    const scrollRef = useRef(null);
 
    useEffect(() => {
@@ -79,12 +80,18 @@ const AgentPage = () => {
    };
 
    const handlePreviousPage = () => {
-      if (page > 0) setPage(page - 1);
+      if (page > 0) {
+         setPage(page - 1);
+         setExpandedCardId(null);
+      }
    };
 
    const handleNextPage = () => {
       const maxPage = Math.ceil(totalCount / ITEMS_PER_PAGE) - 1;
-      if (page < maxPage) setPage(page + 1);
+      if (page < maxPage) {
+         setPage(page + 1);
+         setExpandedCardId(null);
+      }
    };
 
    const renderTabButton = (tab, label) => (
@@ -123,7 +130,12 @@ const AgentPage = () => {
                            No data
                         </div>
                      ) : (
-                        <Cards data={data} selectedTab={selectedTab} />
+                        <Cards 
+                           data={data} 
+                           selectedTab={selectedTab} 
+                           expandedCardId={expandedCardId}
+                           setExpandedCardId={setExpandedCardId}
+                        />
                      )}
                   </div>
                   {data.length > 0 && (
