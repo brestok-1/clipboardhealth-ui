@@ -131,7 +131,7 @@ const AppContext = ({ children }) => {
             if (!token) {
                 return { account: null, statusCode: 401 };
             }
-            const response = await getChats(token, 0, 10);
+            const response = await getChats(token, 0, 100);
             if (response.data) {
                 setChats(response.data);
             } else {
