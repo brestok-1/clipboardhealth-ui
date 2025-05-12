@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://cbhexp.com',
+    baseURL: 'https://api.cbhexp.com',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
