@@ -112,16 +112,20 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                selected={startDate ? new Date(startDate) : null}
                onChange={(date) => {
                   if (date) {
-                     const year = date.getFullYear();
-                     const month = (date.getMonth() + 1)
-                        .toString()
-                        .padStart(2, "0"); 
-                     const day = date.getDate().toString().padStart(2, "0");
-                     const localDate = `${year}-${month}-${day}`;
-                     setStartDate(localDate);
+                     // Create a date object in UTC 
+                     const utcDate = new Date(Date.UTC(
+                        date.getFullYear(),
+                        date.getMonth(),
+                        date.getDate(),
+                        0, 0, 0
+                     ));
+                     
+                     // Format as ISO string and extract the date part (YYYY-MM-DD)
+                     const isoDate = utcDate.toISOString().split('T')[0];
+                     setStartDate(isoDate);
                      onFilterChange({
                         agentId: selectedAgentId,
-                        startDate: localDate,
+                        startDate: isoDate,
                         period: selectedPeriod,
                      });
                   } else {
@@ -267,16 +271,20 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                      selected={startDate ? new Date(startDate) : null}
                      onChange={(date) => {
                         if (date) {
-                           const year = date.getFullYear();
-                           const month = (date.getMonth() + 1)
-                              .toString()
-                              .padStart(2, "0"); 
-                           const day = date.getDate().toString().padStart(2, "0");
-                           const localDate = `${year}-${month}-${day}`;
-                           setStartDate(localDate);
+                           // Create a date object in UTC 
+                           const utcDate = new Date(Date.UTC(
+                              date.getFullYear(),
+                              date.getMonth(),
+                              date.getDate(),
+                              0, 0, 0
+                           ));
+                           
+                           // Format as ISO string and extract the date part (YYYY-MM-DD)
+                           const isoDate = utcDate.toISOString().split('T')[0];
+                           setStartDate(isoDate);
                            onFilterChange({
                               agentId: selectedAgentId,
-                              startDate: localDate,
+                              startDate: isoDate,
                               period: selectedPeriod,
                            });
                         } else {
