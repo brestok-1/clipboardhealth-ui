@@ -54,7 +54,7 @@ const AuthForm = ({ isLogin }) => {
           const status = result.error?.status;
           if (status === 403) {
             setError(result.error?.message || 'Login failed');
-          } else if (status === 404 || status === 400) {
+          } else if (status === 404 || status === 400 || status === 401) {
             setError('Email or password incorrect');
           } else {
             setError('Something went wrong...');
