@@ -18,9 +18,13 @@ const AuthForm = ({ isLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+    const trimmedCode = code.trim();
+
     const newErrors = {
-      email: !email,
-      password: !password,
+      email: !trimmedEmail,
+      password: !trimmedPassword,
     };
     setErrors(newErrors);
 
@@ -32,7 +36,7 @@ const AuthForm = ({ isLogin }) => {
     setError('');
     if (isLogin) {
       try {
-        const result = await loginUser(email, password);
+        const result = await loginUser(trimmedEmail, trimmedPassword);
 
         if (result.successful) {
           const { accessToken } = result.data;
@@ -50,30 +54,35 @@ const AuthForm = ({ isLogin }) => {
           const status = result.error?.status;
           if (status === 403) {
             setError(result.error?.message || 'Login failed');
+          } else if (status === 404 || status === 400) {
+            setError('Email or password incorrect');
+          } else {
+            setError('Something went wrong...');
           }
         }
       } catch (error) {
-        const errorMessage = error.response
-          ? error.response.data.error.message
-          : error.message;
-
-        setError(errorMessage || 'An unexpected error occurred.');
+        const status = error.response ? error.response.status : null;
+        
+        if (status === 400) {
+          setError('Email or password incorrect');
+        } else {
+          setError('Something went wrong...');
+        }
       }
     } else {
       try {
-        const result = await registerUser(email, password, code);
+        const result = await registerUser(trimmedEmail, trimmedPassword, trimmedCode);
+        console.log('Registration result:', result);
 
         if (result.successful) {
           navigate('/auth/login');
         } else {
-          setError(result.error?.message || 'Registration failed');
+          console.log('Registration error details:', result.error);
+          setError('Invalid authorization code or email already exists');
         }
       } catch (error) {
-        const errorMessage = error.response
-          ? error.response.data.error.message
-          : error.message;
-
-        setError(errorMessage || 'An unexpected error occurred.');
+        console.log('Registration catch error:', error);
+        setError('Invalid authorization code or email already exists');
       }
     }
 
@@ -82,6 +91,12 @@ const AuthForm = ({ isLogin }) => {
 
   return (
       <form onSubmit={handleSubmit} className="flex flex-col px-8">
+        {error && (
+          <div className="bg-red-500 text-white p-3 rounded-md mb-4 text-sm">
+            {error}
+          </div>
+        )}
+        
         <div className="flex flex-col gap-1">
           {/* Email Label */}
           <label htmlFor="email" className="text-gray-700 text-sm">
@@ -111,6 +126,7 @@ const AuthForm = ({ isLogin }) => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="Your password"
               className={`bg-white border ${
                   errors.password || error ? 'border-red-500' : 'border-gray-300'
               } text-gray-800 p-2.5 rounded-md text-sm w-full focus:border-blue-500 focus:outline-none mb-2`}
