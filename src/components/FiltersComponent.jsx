@@ -112,20 +112,25 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                selected={startDate ? new Date(startDate) : null}
                onChange={(date) => {
                   if (date) {
-                     // Create a date object in UTC 
+                     // Create a date object in UTC
                      const utcDate = new Date(Date.UTC(
                         date.getFullYear(),
                         date.getMonth(),
                         date.getDate(),
                         0, 0, 0
                      ));
-                     
+
                      // Format as ISO string and extract the date part (YYYY-MM-DD)
                      const isoDate = utcDate.toISOString().split('T')[0];
-                     setStartDate(isoDate);
+                     setStartDate(isoDate); // Keep original state for display if needed
+
+                     const offsetMinutes = date.getTimezoneOffset(); 
+                     const offsetHours = - (offsetMinutes / 60);
+                     const timezoneOffsetString = offsetHours > 0 ? `+${offsetHours}` : `${offsetHours}`;
+
                      onFilterChange({
                         agentId: selectedAgentId,
-                        startDate: isoDate,
+                        startDate: `${isoDate};${timezoneOffsetString}`,
                         period: selectedPeriod,
                      });
                   } else {
@@ -271,20 +276,25 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                      selected={startDate ? new Date(startDate) : null}
                      onChange={(date) => {
                         if (date) {
-                           // Create a date object in UTC 
+                           // Create a date object in UTC
                            const utcDate = new Date(Date.UTC(
                               date.getFullYear(),
                               date.getMonth(),
                               date.getDate(),
                               0, 0, 0
                            ));
-                           
+
                            // Format as ISO string and extract the date part (YYYY-MM-DD)
                            const isoDate = utcDate.toISOString().split('T')[0];
-                           setStartDate(isoDate);
+                           setStartDate(isoDate); // Keep original state for display if needed
+
+                           const offsetMinutes = date.getTimezoneOffset();
+                           const offsetHours = - (offsetMinutes / 60);
+                           const timezoneOffsetString = offsetHours > 0 ? `+${offsetHours}` : `${offsetHours}`;
+
                            onFilterChange({
                               agentId: selectedAgentId,
-                              startDate: isoDate,
+                              startDate: `${isoDate};${timezoneOffsetString}`,
                               period: selectedPeriod,
                            });
                         } else {
