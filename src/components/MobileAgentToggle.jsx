@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MobileUserToggle = ({ selectedTab, handleTabClick }) => {
+const MobileAgentToggle = ({ selectedTab, handleTabClick }) => {
   return (
     <div className="md:hidden w-full my-2 flex items-center justify-center">
       <div className="flex w-full max-w-xs bg-white rounded-full overflow-hidden shadow">
@@ -29,4 +29,4 @@ const MobileUserToggle = ({ selectedTab, handleTabClick }) => {
   );
 };
 
-export default MobileUserToggle; 
+export default MobileAgentToggle; 

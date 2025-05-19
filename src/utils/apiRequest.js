@@ -21,10 +21,6 @@ const apiRequest = async ({ method, url, data, params, headers = {} }) => {
   } catch (error) {
     console.error('API Error:', error);
     const status = error?.response?.status ?? null;
-    if (status === 403) {
-      Cookies.remove('accessToken');
-      window.location.href = '/login';
-    }
     return { data: null, statusCode: status };
   }
 };

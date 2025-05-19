@@ -1,6 +1,6 @@
 import {Route, Routes, useNavigate} from 'react-router-dom';
 import AuthPage from './Page/AuthPage';
-import UserPage from "./Page/UserPage"
+import AgentPage from "./Page/AgentPage"
 import Home from './Page/Home';
 import {useEffect} from "react";
 import Cookies from "js-cookie";
@@ -17,7 +17,7 @@ function App() {
   return (
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/calls" element={<UserPage />} />
+        <Route path="/calls" element={<AgentPage />} />
         <Route path="/auth/login" element={<AuthPage />} />
         <Route path="/auth/register" element={<AuthPage />} />
       </Routes>
