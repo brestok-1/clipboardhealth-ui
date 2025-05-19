@@ -7,29 +7,29 @@ import { getAllAgents } from "../api/agentApi";
 const FiltersComponent = ({ selectedTab, setFilters }) => {
    const [startDate, setStartDate] = useState("");
    const [selectedPeriod, setSelectedPeriod] = useState("");
-   const [agents, setAgents] = useState([]);
-   const [selectedAgentId, setSelectedAgentId] = useState("");
+   const [users, setUsers] = useState([]);
+   const [selectedUserId, setSelectedUserId] = useState("");
    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
    const [searchTerm, setSearchTerm] = useState("");
-   const [filteredAgents, setFilteredAgents] = useState([]);
+   const [filteredUsers, setFilteredUsers] = useState([]);
    const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
    useEffect(() => {
-      const fetchAgents = async () => {
+      const fetchUsers = async () => {
          try {
             const res = await getAllAgents();
             if (res.statusCode === 200 && res.data) {
-               setAgents(res.data);
-               setFilteredAgents(res.data);
+               setUsers(res.data);
+               setFilteredUsers(res.data);
             }
          } catch (error) {
-            console.error("Error fetching agents:", error);
+            console.error("Error fetching users:", error);
          }
       };
       if (selectedTab === 1) {
-         fetchAgents();
+         fetchUsers();
       }
-      setSelectedAgentId("");
+      setSelectedUserId("");
       setSelectedPeriod("");
       setStartDate("");
       setSearchTerm("");
@@ -38,20 +38,20 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
 
    useEffect(() => {
       if (searchTerm.trim() === "") {
-         setFilteredAgents(agents);
+         setFilteredUsers(users);
       } else {
-         const filtered = agents.filter(agent => 
-            agent.name.toLowerCase().includes(searchTerm.toLowerCase())
+         const filtered = users.filter(user => 
+            user.name.toLowerCase().includes(searchTerm.toLowerCase())
          );
-         setFilteredAgents(filtered);
+         setFilteredUsers(filtered);
       }
-   }, [searchTerm, agents]);
+   }, [searchTerm, users]);
 
    const onFilterChange = (newFilters) => {
       const filters = [];
 
-      if (newFilters.agentId) {
-         filters.push({ name: "agent.id", value: newFilters.agentId });
+      if (newFilters.userId) {
+         filters.push({ name: "user.id", value: newFilters.userId });
       }
       if (newFilters.startDate) {
          filters.push({
@@ -66,21 +66,21 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
       setFilters(filters);
    };
 
-   const handleSelectAgent = (id) => {
-      setSelectedAgentId(id);
+   const handleSelectUser = (id) => {
+      setSelectedUserId(id);
       setIsDropdownOpen(false);
       setSearchTerm("");
-      onFilterChange({ agentId: id, startDate, period: selectedPeriod });
+      onFilterChange({ userId: id, startDate, period: selectedPeriod });
    };
 
-   const handleSelectPeriod = (period) => {
+   const handlePeriodChange = (period) => {
       setSelectedPeriod(period);
       setIsDropdownOpen(false);
-      onFilterChange({ agentId: selectedAgentId, startDate, period });
+      onFilterChange({ userId: selectedUserId, startDate, period });
    };
 
-   const selectedAgentName = selectedAgentId
-      ? agents.find((agent) => agent.id === selectedAgentId)?.name
+   const selectedUserName = selectedUserId
+      ? users.find((user) => user.id === selectedUserId)?.name
       : "";
 
    const selectedPeriodName = selectedPeriod
@@ -89,20 +89,20 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
         )?.[0]
       : "";
 
-   const handleAgentSearch = (e) => {
+   const handleUserSearch = (e) => {
       setSearchTerm(e.target.value);
    };
 
-   const clearFilters = () => {
+   const handleClearFilters = () => {
       setStartDate("");
-      setSelectedAgentId("");
+      setSelectedUserId("");
       setSelectedPeriod("");
       setSearchTerm("");
       setFilters([]);
       setIsMobileFilterOpen(false);
    };
 
-   const hasActiveFilters = startDate || selectedAgentId || selectedPeriod;
+   const hasActiveFilters = startDate || selectedUserId || selectedPeriod;
 
    // Рендер десктопной версии фильтров
    const renderDesktopFilters = () => (
@@ -129,14 +129,14 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                      const timezoneOffsetString = offsetHours > 0 ? `+${offsetHours}` : `${offsetHours}`;
 
                      onFilterChange({
-                        agentId: selectedAgentId,
+                        userId: selectedUserId,
                         startDate: `${isoDate};${timezoneOffsetString}`,
                         period: selectedPeriod,
                      });
                   } else {
                      setStartDate("");
                      onFilterChange({
-                        agentId: selectedAgentId,
+                        userId: selectedUserId,
                         startDate: "",
                         period: selectedPeriod,
                      });
@@ -150,42 +150,41 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
 
          {selectedTab === 1 ? (
             <div className="relative w-auto">
-               <button
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="max-w-[170px] w-full py-2 px-4 text-center rounded-2xl overflow-hidden bg-blue-100 hover:bg-gray-200 text-gray-600 outline-none whitespace-nowrap text-ellipsis"
-               >
-                  {selectedAgentId ? `${selectedAgentName}` : "Select Agent"}
-               </button>
-               {isDropdownOpen && (
-                  <div className="absolute w-64 right-0 bg-white border rounded-2xl shadow-md" style={{ zIndex: 1000 }}>
-                     <div className="p-2">
+               <div className="relative">
+                  <button
+                     className="w-full px-4 py-2 text-left border rounded-md hover:bg-gray-50"
+                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  >
+                     {selectedUserId ? `${selectedUserName}` : "Select User"}
+                  </button>
+                  {isDropdownOpen && (
+                     <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg">
                         <input
                            type="text"
+                           className="w-full px-4 py-2 border-b"
                            value={searchTerm}
-                           onChange={handleAgentSearch}
-                           placeholder="Search agent..."
-                           className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                           autoFocus
+                           onChange={handleUserSearch}
+                           placeholder="Search user..."
                         />
+                        <div className="max-h-60 overflow-auto">
+                           {filteredUsers.map((user) => (
+                              <div
+                                 key={user.id}
+                                 onClick={() => handleSelectUser(user.id)}
+                                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                              >
+                                 {user.name}
+                              </div>
+                           ))}
+                           {filteredUsers.length === 0 && (
+                              <div className="px-4 py-2 text-gray-500">
+                                 No users found
+                              </div>
+                           )}
+                        </div>
                      </div>
-                     <ul className="max-h-48 overflow-y-auto">
-                        {filteredAgents.map((agent) => (
-                           <li
-                              key={agent.id}
-                              onClick={() => handleSelectAgent(agent.id)}
-                              className="py-2 px-4 hover:bg-gray-200 cursor-pointer"
-                           >
-                              {agent.name}
-                           </li>
-                        ))}
-                        {filteredAgents.length === 0 && (
-                           <li className="py-2 px-4 text-gray-500 italic">
-                              No agents found
-                           </li>
-                        )}
-                     </ul>
-                  </div>
-               )}
+                  )}
+               </div>
             </div>
          ) : (
             <div className="relative w-auto">
@@ -203,7 +202,7 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                      {Object.entries(PeriodType).map(([label, value]) => (
                         <li
                            key={value}
-                           onClick={() => handleSelectPeriod(value)}
+                           onClick={() => handlePeriodChange(value)}
                            className="py-2 px-4 hover:bg-gray-200 cursor-pointer"
                         >
                            {label}
@@ -215,7 +214,7 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
          )}
          {hasActiveFilters && (
             <button
-               onClick={clearFilters}
+               onClick={handleClearFilters}
                className="text-black rounded-2xl"
             >
                <svg
@@ -258,7 +257,7 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
             
             {hasActiveFilters && (
                <button
-                  onClick={clearFilters}
+                  onClick={handleClearFilters}
                   className="text-sm text-red-500 underline"
                >
                   Clear all
@@ -293,14 +292,14 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                            const timezoneOffsetString = offsetHours > 0 ? `+${offsetHours}` : `${offsetHours}`;
 
                            onFilterChange({
-                              agentId: selectedAgentId,
+                              userId: selectedUserId,
                               startDate: `${isoDate};${timezoneOffsetString}`,
                               period: selectedPeriod,
                            });
                         } else {
                            setStartDate("");
                            onFilterChange({
-                              agentId: selectedAgentId,
+                              userId: selectedUserId,
                               startDate: "",
                               period: selectedPeriod,
                            });
@@ -315,14 +314,14 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                {selectedTab === 1 ? (
                   <div className="mb-4">
                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Agent
+                        User
                      </label>
                      <div className="relative">
                         <button
                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                            className="w-full py-2 px-4 text-left border border-gray-300 rounded-lg"
                         >
-                           {selectedAgentId ? selectedAgentName : "Select Agent"}
+                           {selectedUserId ? selectedUserName : "Select User"}
                         </button>
                         {isDropdownOpen && (
                            <div className="absolute w-full mt-1 bg-white border rounded-lg shadow-md z-10">
@@ -330,28 +329,28 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                                  <input
                                     type="text"
                                     value={searchTerm}
-                                    onChange={handleAgentSearch}
-                                    placeholder="Search agent..."
+                                    onChange={handleUserSearch}
+                                    placeholder="Search user..."
                                     className="w-full p-2 border rounded-lg"
                                     autoFocus
                                  />
                               </div>
-                              <ul className="max-h-48 overflow-y-auto">
-                                 {filteredAgents.map((agent) => (
-                                    <li
-                                       key={agent.id}
-                                       onClick={() => handleSelectAgent(agent.id)}
-                                       className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
+                              <div className="max-h-60 overflow-auto">
+                                 {filteredUsers.map((user) => (
+                                    <div
+                                       key={user.id}
+                                       onClick={() => handleSelectUser(user.id)}
+                                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                                     >
-                                       {agent.name}
-                                    </li>
+                                       {user.name}
+                                    </div>
                                  ))}
-                                 {filteredAgents.length === 0 && (
-                                    <li className="py-2 px-4 text-gray-500 italic">
-                                       No agents found
-                                    </li>
+                                 {filteredUsers.length === 0 && (
+                                    <div className="px-4 py-2 text-gray-500">
+                                       No users found
+                                    </div>
                                  )}
-                              </ul>
+                              </div>
                            </div>
                         )}
                      </div>
@@ -373,7 +372,7 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                               {Object.entries(PeriodType).map(([label, value]) => (
                                  <li
                                     key={value}
-                                    onClick={() => handleSelectPeriod(value)}
+                                    onClick={() => handlePeriodChange(value)}
                                     className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
                                  >
                                     {label}
@@ -393,7 +392,7 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
                      Close
                   </button>
                   <button
-                     onClick={clearFilters}
+                     onClick={handleClearFilters}
                      className="py-2 px-4 bg-red-100 text-red-700 rounded-lg hover:bg-red-200"
                   >
                      Clear Filters
