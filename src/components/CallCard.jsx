@@ -28,29 +28,29 @@ const CallCard = ({ call, isExpanded, onToggleExpand }) => {
                   <p className="text-sm text-gray-700 font-bold">👥 From:</p>
                   <p className="text-sm text-gray-500">
                      <span className="font-semibold">Name:</span>{" "}
-                     {call?.agent?.name || "N/A"}
+                     {call?.user?.name || "N/A"}
                   </p>
                   <p className="text-sm text-gray-500">
                      <span className="font-semibold">Phone:</span>{" "}
                      <a
                         className="hover:text-blue-600"
-                        href={`tel:${call?.agent?.phone}`}
+                        href={`tel:${call?.user?.phone}`}
                      >
-                        {call?.agent?.phone}
+                        {call?.user?.phone}
                      </a>
                   </p>
                   <p className="text-sm text-gray-500">
                      <span className="font-semibold">Email:</span>{" "}
                      <a
                         className="hover:text-blue-600"
-                        href={`mailto:${call?.agent?.email}`}
+                        href={`mailto:${call?.user?.account?.email}`}
                      >
-                        {call.agent?.email}
+                        {call?.user?.account?.email}
                      </a>
                   </p>
                   <p className="text-sm text-gray-500">
                      <span className="font-semibold">Job Role:</span>{" "}
-                     {call?.agent?.jobRole}
+                     {call?.user?.jobRole}
                   </p>
                </div>
                <div className="flex flex-col gap-2 flex-[2]">
@@ -113,29 +113,29 @@ const CallCard = ({ call, isExpanded, onToggleExpand }) => {
 
             {/* Mobile layout */}
             <div className="flex flex-col md:hidden gap-4">
-               {/* Agent info (From) */}
+               {/* User info (From) */}
                <div className="border-b pb-3">
                   <p className="text-sm text-gray-700 font-bold mb-2">👥 From:</p>
                   <div className="grid grid-cols-1 gap-1">
                      <p className="text-sm text-gray-500">
                         <span className="font-semibold">Name:</span>{" "}
-                        {call?.agent?.name || "N/A"}
+                        {call?.user?.name || "N/A"}
                      </p>
                      <p className="text-sm text-gray-500">
                         <span className="font-semibold">Phone:</span>{" "}
-                        <a className="hover:text-blue-600" href={`tel:${call?.agent?.phone}`}>
-                           {call?.agent?.phone}
+                        <a className="hover:text-blue-600" href={`tel:${call?.user?.phone}`}>
+                           {call?.user?.phone}
                         </a>
                      </p>
                      <p className="text-sm text-gray-500">
                         <span className="font-semibold">Email:</span>{" "}
-                        <a className="hover:text-blue-600" href={`mailto:${call?.agent?.email}`}>
-                           {call.agent?.email}
+                        <a className="hover:text-blue-600" href={`mailto:${call?.user?.account?.email}`}>
+                           {call?.user?.account?.email}
                         </a>
                      </p>
                      <p className="text-sm text-gray-500">
                         <span className="font-semibold">Job Role:</span>{" "}
-                        {call?.agent?.jobRole}
+                        {call?.user?.jobRole}
                      </p>
                   </div>
                </div>
@@ -205,7 +205,7 @@ const CallCard = ({ call, isExpanded, onToggleExpand }) => {
                </p>
                <div className="flex flex-wrap md:flex-nowrap justify-between gap-4">
                   <p className="flex-1 text-sm text-gray-500 min-w-[100px]">
-                     <span className="font-semibold">Agent:</span>{" "}
+                     <span className="font-semibold">User:</span>{" "}
                      {timeDistributionsByType[1] != null
                         ? `${timeDistributionsByType[1]}%`
                         : "-"}
