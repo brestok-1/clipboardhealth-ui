@@ -51,7 +51,7 @@ const FiltersComponent = ({ selectedTab, setFilters }) => {
       const filters = [];
 
       if (newFilters.agentId) {
-         filters.push({ name: "agent.id", value: newFilters.agentId });
+         filters.push({ name: "user.salesLoftId", value: newFilters.agentId });
       }
       if (newFilters.startDate) {
          filters.push({
