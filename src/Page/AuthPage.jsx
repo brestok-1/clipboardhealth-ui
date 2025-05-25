@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
-import axios from 'axios';
+import api from "../api";
 
 const AuthPage = () => {
   const [loading, setLoading] = useState(false);
@@ -11,7 +11,7 @@ const AuthPage = () => {
     setLoading(true);
     setGoogleError('');
     try {
-      const response = await axios.get('/google/login');
+      const response = await api.get('/api/security/google/login');
       const url = response?.data?.data?.text;
       if (url) {
         window.location.href = url;
