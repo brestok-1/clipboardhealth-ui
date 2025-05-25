@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {loginUser, registerUser} from '../api/securityApi';
 import Cookies from 'js-cookie';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import {ContextApp} from '../utils/Context';
 
 const AuthForm = ({ isLogin }) => {
@@ -14,6 +14,14 @@ const AuthForm = ({ isLogin }) => {
 
   const {getAllChats, loadChatMessages} = useContext(ContextApp);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  React.useEffect(() => {
+    if (location.state && location.state.socialError) {
+      setError('Something went wrong during social authorization. Please try again.');
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

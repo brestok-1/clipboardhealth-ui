@@ -4,6 +4,7 @@ import AgentPage from "./Page/AgentPage"
 import Home from './Page/Home';
 import {useEffect} from "react";
 import Cookies from "js-cookie";
+import SocialAuthHandler from './Page/SocialAuthHandler';
 
 function App() {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ function App() {
         <Route path="/calls" element={<AgentPage />} />
         <Route path="/auth/login" element={<AuthPage />} />
         <Route path="/auth/register" element={<AuthPage />} />
+        <Route path="/auth/login/social" element={<SocialAuthHandler />} />
       </Routes>
  
   );
