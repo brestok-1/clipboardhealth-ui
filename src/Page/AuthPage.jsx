@@ -25,11 +25,23 @@ const AuthPage = () => {
     }
   };
 
+  const isChromeOniOS = () => {
+    const ua = window.navigator.userAgent;
+    return /CriOS/i.test(ua) && /iphone|ipod|ipad/i.test(ua);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-blue-100">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-10 flex flex-col items-center">
         <h1 className="text-3xl font-bold text-gray-800 mb-2 text-center">Welcome</h1>
         <p className="text-lg text-gray-500 mb-8 text-center">Sign in to your account with Google</p>
+        {isChromeOniOS() && (
+          <div className="bg-yellow-100 border border-yellow-300 text-yellow-800 p-3 rounded-md mb-4 text-center w-full text-base">
+            <b>Notice for Chrome on IOS:</b><br />
+            Google sign-in may not work properly in Chrome on iPhone or iPad due to browser limitations. <br />
+            Please use <b>Safari</b> for a smoother login experience.
+          </div>
+        )}
         <button
           onClick={handleGoogleLogin}
           disabled={loading}
