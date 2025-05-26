@@ -79,7 +79,7 @@ const AppContext = ({ children }) => {
             let agentMessageAdded = false; // флаг для отслеживания добавления сообщения агента
             
             let eventSource;
-            const url = `${process.env.REACT_APP_API_URL || 'http://localhost:8000'}/api/agent/${chatId}?query=${encodeURIComponent(chatValue)}&token=${token}`;
+            const url = `https://api.cbhexp.com/api/agent/${chatId}?query=${encodeURIComponent(chatValue)}&token=${token}`;
             eventSource = new window.EventSource(url);
 
             eventSource.onmessage = (event) => {
