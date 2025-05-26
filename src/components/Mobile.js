@@ -33,6 +33,7 @@ function Mobile() {
 
   const handleSelectChat = (chatId) => {
     selectedChatById(chatId);
+    setMobile(false);
   };
 
   function handleLogout() {
@@ -119,6 +120,7 @@ function Mobile() {
         console.log('Chat created:', response);
         setSelectedChat(response.data.id);
         selectedChatById(response.data.id);
+        setMobile(false);
        
       } else {
         console.error('Error creating chat:', response.message);
