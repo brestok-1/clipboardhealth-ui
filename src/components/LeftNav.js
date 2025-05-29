@@ -36,6 +36,8 @@ function LeftNav() {
     setChats([]);
     Cookies.remove('accessToken', {
       path: '/',
+      secure: true,
+      sameSite: 'strict'
     });
     navigate('/auth/login');
   }

@@ -10,7 +10,12 @@ const SocialAuthHandler = () => {
     const params = new URLSearchParams(location.search);
     const accessToken = params.get('accessToken');
     if (accessToken) {
-      Cookies.set('accessToken', accessToken, { expires: 30, path: '/' });
+      Cookies.set('accessToken', accessToken, { 
+        expires: 30, 
+        path: '/', 
+        secure: true,
+        sameSite: 'strict'
+      });
       navigate('/', { replace: true });
     } else {
       navigate('/auth/login', { replace: true, state: { socialError: true } });

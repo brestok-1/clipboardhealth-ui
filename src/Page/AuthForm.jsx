@@ -53,6 +53,8 @@ const AuthForm = ({ isLogin }) => {
             Cookies.set('accessToken', accessToken.value, {
               expires: 30,
               path: '/',
+              secure: true,
+              sameSite: 'strict'
             });
           }
           navigate("/");
