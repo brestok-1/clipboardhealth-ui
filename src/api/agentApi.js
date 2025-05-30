@@ -19,6 +19,20 @@ export const getAllCalls = async (pageSize, pageIndex) => {
    return { data, statusCode };
 };
 
+export const getCallById = async (callId) => {
+   const { data, statusCode } = await apiRequest({
+      method: "get",
+      url: `/api/call/${callId}`,
+   });
+
+   if (statusCode !== 200) {
+      console.error("Error fetching call data:", statusCode);
+      return { data: null, statusCode };
+   }
+
+   return { data, statusCode };
+};
+
 export const getAllStatistics = async (pageSize, pageIndex) => {
     const { data, statusCode } = await apiRequest({
        method: "get",

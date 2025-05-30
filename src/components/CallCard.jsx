@@ -1,16 +1,23 @@
 // CallCard.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/formatDate";
 import ReactMarkdown from "react-markdown";
 import { AiOutlinePhone } from 'react-icons/ai';
 
 
 const CallCard = ({ call, isExpanded, onToggleExpand }) => {
+   const navigate = useNavigate();
+   
    const timeDistributionsByType =
       call?.timeDistributions?.reduce((acc, dist) => {
          acc[dist.type] = dist.value;
          return acc;
       }, {}) ?? {};
+
+   const handleViewDetails = () => {
+      navigate(`/call/${call.id}`);
+   };
 
    return (
       <div
@@ -250,12 +257,18 @@ const CallCard = ({ call, isExpanded, onToggleExpand }) => {
             </div>
          )}
 
-         <div className="flex justify-center mt-6">
+         <div className="flex justify-center mt-6 gap-3">
             <button
                onClick={onToggleExpand}
-               className="px-8 py-2 rounded-3xl flex items-center border border-gray-300 justify-center hover:bg-gray-100"
+               className="px-6 py-2 rounded-3xl flex items-center border border-gray-300 justify-center hover:bg-gray-100"
             >
                {isExpanded ? "Hide" : "AI Analysis"}
+            </button>
+            <button
+               onClick={handleViewDetails}
+               className="px-6 py-2 rounded-3xl flex items-center bg-blue-500 text-white justify-center hover:bg-blue-600 transition-colors"
+            >
+               View Details
             </button>
          </div>
       </div>
