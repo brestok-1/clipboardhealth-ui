@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { FiMessageSquare, FiMoreHorizontal } from 'react-icons/fi';
-import { ContextApp } from '../utils/Context';
+import React, {useContext, useState} from 'react';
+import {AiOutlinePlus} from 'react-icons/ai';
+import {FiMessageSquare, FiMoreHorizontal} from 'react-icons/fi';
+import {ContextApp} from '../utils/Context';
 import Cookies from 'js-cookie';
-import { createChat, deleteChat, updateTitle } from '../api/chatApi';
+import {deleteChat, updateTitle} from '../api/chatApi';
 import ModalMore from './ModalMore';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import ChatListSkeleton from './ChatListSkeleton';
 
 function LeftNav() {
@@ -25,6 +25,9 @@ function LeftNav() {
     selectedChatById,
     loadChatMessages,
     isLoadingChats,
+    setMessage,
+    resetFileUpload,
+    createNewChat,
   } = useContext(ContextApp);
 
   const handleSelectChat = (chatId) => {
@@ -45,7 +48,7 @@ function LeftNav() {
   const handleOpenModal = (e, chatId) => {
     const buttonRect = e.currentTarget.getBoundingClientRect();
     setButtonPosition({
-      top: buttonRect.top,
+      top: buttonRect.top - 20,
       left: buttonRect.left,
     });
     setIsModalOpen(true);
@@ -91,6 +94,8 @@ function LeftNav() {
         setSelectedChat(null);
         setIsModalOpen(false);
         setSelectedChatId(null);
+        setMessage([]);
+        resetFileUpload();
         loadChatMessages(null);
       } else {
         console.error('Error deleting chat:', response.message);
@@ -106,24 +111,7 @@ function LeftNav() {
     setIsModalOpen(false);
   };
 
-  const handleCreateChat = async () => {
-    try {
-      const token = Cookies.get('accessToken');
-      const response = await createChat(token);
-      if (response.successful) {
-        console.log('Chat created:', response);
-        setSelectedChat(response.data.id);
-        selectedChatById(response.data.id);
 
-      } else {
-        console.error('Error creating chat:', response.message);
-        alert(`Error: ${response.message}`);
-      }
-    } catch (error) {
-      console.error('Unexpected error:', error);
-    }
-    getAllChats();
-  };
 
   const isLoggedIn = !!Cookies.get('accessToken');
 
@@ -131,7 +119,7 @@ function LeftNav() {
     if (isLoadingChats) {
       return <ChatListSkeleton />;
     }
-    
+
     if (chats && chats.length > 0) {
       return chats.map((chat) => (
         <div
@@ -166,7 +154,7 @@ function LeftNav() {
               <button
                 className="ml-auto flex p-2 items-center justify-end"
                 onClick={(e) => {
-                  e.stopPropagation(); 
+                  e.stopPropagation();
                   handleOpenModal(e, chat.id);
                 }}
               >
@@ -177,7 +165,7 @@ function LeftNav() {
         </div>
       ));
     }
-    
+
     return <p>No chats available</p>;
   };
 
@@ -185,25 +173,25 @@ function LeftNav() {
     <div
       className={
         !showSlide
-          ? 'h-full bg-white w-[250px] hidden lg:flex items-center justify-between p-2 text-gray-700 flex-col translate-x-0'
+            ? 'h-full min-h-0 bg-white w-[250px] hidden lg:flex flex-col p-2 text-gray-700 translate-x-0'
           : 'hidden'
       }
     >
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-center justify-between w-full flex-shrink-0">
         <span className="text-xl font-semibold">Chatbot</span>
         <button
           className="rounded px-3 py-[9px] hidden lg:flex items-center justify-center cursor-pointer text-gray-700 m-1 hover:bg-gray-100 duration-200"
-          onClick={handleCreateChat}
+          onClick={createNewChat}
         >
           <AiOutlinePlus fontSize={16} />
         </button>
       </div>
-      <div className="h-full w-full p-2 flex items-start justify-start flex-col overflow-hidden overflow-y-auto text-sm scroll my-2">
+      <div className="flex-1 min-h-0 w-full p-2 flex flex-col overflow-y-auto text-sm scroll my-2">
         {renderChatList()}
       </div>
       <button
         onClick={isLoggedIn ? handleLogout : () => navigate('/auth/login')}
-        className="text-lg font-geist bg-gray-200 duration-300 truncate mb-2 hover:bg-gray-300 py-3 rounded-lg w-full"
+        className="text-lg font-geist bg-gray-200 duration-300 truncate mb-2 hover:bg-gray-300 py-3 rounded-lg w-full flex-shrink-0"
       >
         {isLoggedIn ? 'Log Out' : 'Log In'}
       </button>

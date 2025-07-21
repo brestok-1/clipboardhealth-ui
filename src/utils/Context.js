@@ -1,6 +1,6 @@
 import {createContext, useEffect, useRef, useState} from 'react';
 import Cookies from 'js-cookie';
-import {getAllChatMessages, sendMessage,} from '../api/messageApi';
+import {getAllChatMessages,} from '../api/messageApi';
 import {createChat, getChatById, getChats} from '../api/chatApi';
 
 export const ContextApp = createContext();
@@ -9,7 +9,6 @@ const AppContext = ({ children }) => {
     const [showSlide, setShowSlide] = useState(false);
     const [Mobile, setMobile] = useState(false);
     const [chats, setChats] = useState([]);
-    const [chatValue, setChatValue] = useState('');
     const [account, setAccount] = useState('');
     const [status, setStatus] = useState('');
     const [message, setMessage] = useState([]);
@@ -17,6 +16,8 @@ const AppContext = ({ children }) => {
     const [isLoading, setIsLoading] =useState(false);
     const [isLoadingMessages, setIsLoadingMessages] = useState(false);
     const [isLoadingChats, setIsLoadingChats] = useState(false);
+    const [pendingMessage, setPendingMessage] = useState(null);
+    const [isSending, setIsSending] = useState(false);
 
     const [selectedChat, setSelectedChat] = useState(null);
     const msgEnd = useRef(null);
@@ -25,15 +26,15 @@ const AppContext = ({ children }) => {
         if (msgEnd.current) {
             msgEnd.current.scrollIntoView({ behavior: 'smooth' });
         }
-    }, [message]);
+    }, [message.length]);
 
     const loadChatMessages = async (chatId) => {
         console.log(chatId)
         const token = Cookies.get('accessToken');
-        
+
         if (chatId) {
             setIsLoadingMessages(true);
-            
+
             try {
                 const result = await getAllChatMessages(token, chatId);
 
@@ -42,9 +43,11 @@ const AppContext = ({ children }) => {
                         text: msg.content,
                         isBot: msg.role === 'ai',
                         type: msg.role === 'ai' ? 'ai' : 'user',
-                        steps: [], // добавляем пустой массив steps для совместимости
+                        steps: [],
                         file: msg?.fileUrl,
-                        isStreaming: false // загруженные сообщения не стримятся
+                        isStreaming: false,
+                        shifts: Array.isArray(msg.shifts) ? msg.shifts : [],
+                        stream: []
                     }));
 
                     setMessage(formattedMessages);
@@ -60,24 +63,24 @@ const AppContext = ({ children }) => {
         }
     };
 
-    // Добавить функцию для стриминга сообщений
     const sendStreamingMessage = async (token, chatId, chatValue, updateMessages) => {
         try {
             updateMessages((prev) => [
                 ...prev,
                 { text: chatValue, isBot: false, type: 'user' },
             ]);
-            
+
             let currentAgentMessage = {
                 text: '',
                 isBot: true,
                 type: 'ai',
-                steps: [], // массив для tool/tool_query/tool_response
-                isStreaming: true // добавляем флаг для отслеживания стриминга
+                steps: [],
+                isStreaming: true,
+                stream: []
             };
-            
-            let agentMessageAdded = false; // флаг для отслеживания добавления сообщения агента
-            
+
+            let agentMessageAdded = false;
+
             let eventSource;
             const url = `https://api.cbhexp.com/api/agent/${chatId}?query=${encodeURIComponent(chatValue)}&token=${token}`;
             eventSource = new window.EventSource(url);
@@ -89,73 +92,126 @@ const AppContext = ({ children }) => {
                 } catch (e) {
                     return;
                 }
-                
-                // Приводим text к строке, если это не строка
+
                 if (data.text && typeof data.text !== 'string') {
                     data.text = JSON.stringify(data.text);
                 }
-                
-                // Добавляем сообщение агента при первом ответе от сервера
+
                 if (!agentMessageAdded) {
                     updateMessages((prev) => [...prev, currentAgentMessage]);
                     agentMessageAdded = true;
                 }
-                
+
                 if (data.type === 'ai_token') {
                     currentAgentMessage.text += data.text || '';
-                    currentAgentMessage.isStreaming = true; // все еще стримится
+
+                    const lastStreamItem = currentAgentMessage.stream[currentAgentMessage.stream.length - 1];
+                    if (lastStreamItem && lastStreamItem.type === 'thinking' && lastStreamItem.isActive) {
+                        lastStreamItem.isActive = false;
+                    }
+
+                    if (lastStreamItem && lastStreamItem.type === 'text') {
+                        lastStreamItem.content += data.text || '';
+                    } else {
+                        currentAgentMessage.stream.push({type: 'text', content: data.text || ''});
+                    }
+
+                    currentAgentMessage.isStreaming = true;
                     updateMessages((prev) => {
-                        // обновляем только последнее сообщение (текущее сообщение агента)
-                        return [...prev.slice(0, -1), { ...currentAgentMessage }];
+                        return [...prev.slice(0, -1), {...currentAgentMessage}];
                     });
                 } else if (["tool", "tool_query", "tool_response"].includes(data.type)) {
-                    currentAgentMessage.steps.push({ ...data });
-                    currentAgentMessage.isStreaming = true; // агент думает
+                    currentAgentMessage.steps.push({...data});
+
+                    const lastStreamItem = currentAgentMessage.stream[currentAgentMessage.stream.length - 1];
+                    if (lastStreamItem && lastStreamItem.type === 'thinking') {
+                        lastStreamItem.steps.push({...data});
+                    } else {
+                        currentAgentMessage.stream.push({
+                            type: 'thinking',
+                            steps: [{...data}],
+                            isActive: true
+                        });
+                    }
+
+                    currentAgentMessage.isStreaming = true;
                     updateMessages((prev) => {
-                        // обновляем только последнее сообщение (текущее сообщение агента)
-                        return [...prev.slice(0, -1), { ...currentAgentMessage }];
+                        return [...prev.slice(0, -1), {...currentAgentMessage}];
+                    });
+                } else if (data.type === 'ai_thoughts') {
+                    currentAgentMessage.steps.push({...data});
+                    const lastStreamItem = currentAgentMessage.stream[currentAgentMessage.stream.length - 1];
+                    if (lastStreamItem && lastStreamItem.type === 'thinking') {
+                        lastStreamItem.steps.push({...data});
+                    } else {
+                        currentAgentMessage.stream.push({
+                            type: 'thinking',
+                            steps: [{...data}],
+                            isActive: true
+                        });
+                    }
+                    currentAgentMessage.isStreaming = true;
+                    updateMessages((prev) => {
+                        return [...prev.slice(0, -1), {...currentAgentMessage}];
                     });
                 } else if (data.type === 'ai') {
-                    currentAgentMessage.text = data.text || '';
-                    currentAgentMessage.isStreaming = false; // стриминг завершен
+                    currentAgentMessage.isStreaming = false;
+
+                    if (data.text && data.text.trim() !== '' && data.text !== currentAgentMessage.text) {
+                        const lastStreamItem = currentAgentMessage.stream[currentAgentMessage.stream.length - 1];
+                        if (lastStreamItem && lastStreamItem.type === 'text') {
+                            lastStreamItem.content += data.text;
+                        } else {
+                            currentAgentMessage.stream.push({type: 'text', content: data.text});
+                        }
+                        currentAgentMessage.text += data.text;
+                    }
+
                     updateMessages((prev) => {
-                        // обновляем только последнее сообщение (текущее сообщение агента)
-                        return [...prev.slice(0, -1), { ...currentAgentMessage }];
+                        return [...prev.slice(0, -1), {...currentAgentMessage}];
                     });
                 }
             };
             eventSource.onerror = () => {
                 currentAgentMessage.isStreaming = false;
                 updateMessages((prev) => {
-                    return [...prev.slice(0, -1), { ...currentAgentMessage }];
+                    return [...prev.slice(0, -1), {...currentAgentMessage}];
                 });
                 eventSource.close();
             };
         } catch (error) {
             updateMessages((prev) => [
                 ...prev,
-                { text: 'Error: ' + error.message, isBot: true, type: 'ai', steps: [], isStreaming: false },
+                {text: 'Error: ' + error.message, isBot: true, type: 'ai', steps: [], isStreaming: false},
             ]);
         }
     };
 
-    const handleSend = async () => {
+    const handleSend = async (chatValue, setChatValue, setFileData, chatMode, uploadedFileId, fileData) => {
+        if (isSending) {
+            return;
+        }
+
         const text = chatValue;
-        setChatValue('');
+        const file = fileData;
+
+        setChatValue && setChatValue('');
+        setFileData && setFileData(null);
         setIsLoading(true);
+        setIsSending(true);
         const token = Cookies.get('accessToken');
+
+        const handleFileUploadFlow = async (chatId, userMessage) => {
+            await sendStreamingMessage(token, chatId, userMessage, setMessage);
+        };
+
         if (!selectedChat) {
             try {
                 const newChat = await createChat(token);
-                if (newChat) {
+                if (newChat && newChat.successful) {
                     setSelectedChat(newChat.data.id);
                     setMobile(false);
-                    await sendStreamingMessage(
-                        token,
-                        newChat.data.id,
-                        text,
-                        setMessage,
-                    );
+                    await handleFileUploadFlow(newChat.data.id, text);
                 } else {
                     console.error('Failed to create a new chat');
                 }
@@ -164,24 +220,32 @@ const AppContext = ({ children }) => {
             }
             getAllChats();
         } else {
-            await sendStreamingMessage(
-                token,
-                selectedChat,
-                text,
-                setMessage,
-            );
+            await handleFileUploadFlow(selectedChat, text);
         }
         setIsLoading(false);
+        setIsSending(false);
     };
 
-    const handleKeyPress = (e) => {
-        if(!isLoading) {
-        if (e.key === 'Enter') {
-            if (chatValue.trim() !== '' || fileData) {
-                handleSend();
+    const createNewChat = () => {
+        setSelectedChat(null);
+        setMessage([]);
+    };
+
+    const handleKeyPress = (e, chatValue, setChatValue, setFileData, chatMode, uploadedFileId, fileData, handleSend) => {
+        if (!isLoading && !isSending) {
+            if (e.key === 'Enter') {
+                if (e.shiftKey) {
+                    return;
+                }
+                e.preventDefault();
+                if (chatMode === 'File' && !uploadedFileId && !fileData) {
+                    return;
+                }
+                if (chatValue.trim() !== '' || fileData) {
+                    handleSend && handleSend(chatValue, setChatValue, setFileData, chatMode, uploadedFileId, fileData);
+                }
             }
         }
-    }
     };
 
     const selectedChatById = async (chatId) => {
@@ -191,7 +255,8 @@ const AppContext = ({ children }) => {
             if (chat) {
                 setSelectedChat(chatId);
                 setMessage([])
-                loadChatMessages(chatId);
+
+                await loadChatMessages(chatId)
             }
         } catch (error) {
             console.error('Error fetching chat by ID:', error.message);
@@ -205,6 +270,7 @@ const AppContext = ({ children }) => {
             if (!token) {
                 return { account: null, statusCode: 401 };
             }
+            // Determine chat type based on current chat mode
             const response = await getChats(token, 0, 100);
             if (response.data) {
                 setChats(response.data);
@@ -230,27 +296,32 @@ const AppContext = ({ children }) => {
                 setShowSlide,
                 Mobile,
                 setMobile,
-                chatValue,
-                setChatValue,
-                handleSend,
+                chats,
+                setChats,
+                account,
+                setAccount,
+                status,
+                setStatus,
                 message,
                 setMessage,
-                chats,
-                msgEnd,
-                handleKeyPress,
-                account,
-                status,
-                loadChatMessages,
-                setSelectedChat,
-                selectedChat,
-                selectedChatById,
-                setFileData,
-                getAllChats,
-                setChats,
                 fileData,
+                setFileData,
                 isLoading,
+                setIsLoading,
                 isLoadingMessages,
-                isLoadingChats
+                setIsLoadingMessages,
+                isLoadingChats,
+                setIsLoadingChats,
+                handleSend,
+                handleKeyPress,
+                selectedChat,
+                setSelectedChat,
+                msgEnd,
+                loadChatMessages,
+                selectedChatById,
+                getAllChats,
+                createNewChat,
+                isSending
             }}
         >
             {children}

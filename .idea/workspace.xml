@@ -4,13 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0572a526-ce8b-44b6-a888-7e96935258e9" name="Changes" comment="change number of items per page">
-      <change afterPath="$PROJECT_DIR$/.idea/hectool-demo-frontend.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="0572a526-ce8b-44b6-a888-7e96935258e9" name="Changes" comment="Add detail page">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Chat.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ChatContainer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChatContainer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/LeftNav.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LeftNav.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/Context.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/Context.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,25 +43,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Node.js.App.js.executor": "Run",
-    "Node.js.Context.js.executor": "Run",
-    "Node.js.LeftNav.js.executor": "Run",
-    "Node.js.messageApi.js.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "cbh",
-    "last_opened_file_path": "/Users/brestok/Development/React/hectool-demo-frontend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "npm.start.executor": "Run",
-    "ts.external.directory.path": "/Applications/PyCharm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Node.js.App.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Context.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.LeftNav.js.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.messageApi.js.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;cbh&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/brestok/Development/React/hectool-demo-frontend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.start.executor&quot;: &quot;Run&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/PyCharm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
@@ -123,6 +126,13 @@
       <workItem from="1744115125146" duration="602000" />
       <workItem from="1746636066635" duration="968000" />
       <workItem from="1746712359480" duration="2859000" />
+      <workItem from="1749374566066" duration="627000" />
+      <workItem from="1749644439382" duration="21000" />
+      <workItem from="1749645322494" duration="274000" />
+      <workItem from="1749646138458" duration="224000" />
+      <workItem from="1749650179531" duration="16000" />
+      <workItem from="1749650274839" duration="624000" />
+      <workItem from="1752830643769" duration="7360000" />
     </task>
     <task id="LOCAL-00001" summary="update readme and env">
       <option name="closed" value="true" />

@@ -25,6 +25,17 @@
   }
 }
 
+@keyframes loading-pulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
 .thinking-dot {
   animation: thinking-pulse 1.4s ease-in-out infinite;
 }
@@ -55,6 +66,22 @@
 
 .typing-dot:nth-child(3) {
   animation-delay: 0.2s;
+}
+
+.loading-dot {
+  animation: loading-pulse 1.2s ease-in-out infinite;
+}
+
+.loading-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 0.3s;
 }
 
 /* Hover effect for agent thoughts button */
@@ -94,6 +121,23 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
+
+  /* Table mobile responsiveness */
+  .group .table-container {
+    margin: 0.5rem 0;
+    font-size: 14px;
+  }
+
+  .group table {
+    min-width: 500px;
+  }
+
+  .group table th,
+  .group table td {
+    padding: 0.5rem 0.75rem;
+    font-size: 13px;
+    white-space: nowrap;
+  }
 }
 
 .scroll::-webkit-scrollbar {
@@ -108,11 +152,11 @@
   background-color: #cbd5e1; /* color of the scroll thumb */
   border-radius: 8px; /* roundness of the scroll thumb */
 }
-.group h1, 
-.group h2, 
-.group h3, 
-.group h4, 
-.group h5, 
+.group h1,
+.group h2,
+.group h3,
+.group h4,
+.group h5,
 .group h6 {
   margin: 1rem 0;
   font-weight: bold;
@@ -175,6 +219,118 @@
   border: 0;
   border-top: 1px solid #e2e8f0;
   margin: 1rem 0;
+}
+
+/* Table container for horizontal scrolling */
+.group .table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  -webkit-overflow-scrolling: touch;
+  /* Custom scrollbar for tables */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+  /* Ensure smooth scrolling */
+  scroll-behavior: smooth;
+}
+
+/* Webkit scrollbar for table container */
+.group .table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.group .table-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.group .table-container::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+}
+
+.group .table-container::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+/* Table styles for ReactMarkdown */
+.group table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  table-layout: auto;
+}
+
+/* Dynamic width based on column count */
+.group table[data-columns="1"], .group table[data-columns="2"], .group table[data-columns="3"] {
+  min-width: 600px;
+}
+
+.group table[data-columns="4"], .group table[data-columns="5"] {
+  min-width: 900px;
+}
+
+.group table[data-columns="6"], .group table[data-columns="7"] {
+  min-width: 1200px;
+}
+
+.group table[data-columns="8"], .group table[data-columns="9"] {
+  min-width: 1500px;
+}
+
+.group table[data-columns="10"] {
+  min-width: 1800px;
+}
+
+/* For tables with more than 10 columns, set even larger min-width */
+.group table[data-many-columns="true"] {
+  min-width: 2000px;
+}
+
+.group table th,
+.group table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+  border-right: 1px solid #e2e8f0;
+  white-space: nowrap;
+  min-width: 120px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Ensure minimum column widths for better readability */
+.group table th {
+  min-width: 140px;
+}
+
+.group table th:last-child,
+.group table td:last-child {
+  border-right: none;
+}
+
+.group table th {
+  background-color: #f8fafc;
+  font-weight: 600;
+  color: #1e293b;
+  border-bottom: 2px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.group table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.group table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .tool-message {
