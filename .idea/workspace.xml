@@ -4,16 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0572a526-ce8b-44b6-a888-7e96935258e9" name="Changes" comment="Add detail page">
+    <list default="true" id="0572a526-ce8b-44b6-a888-7e96935258e9" name="Changes" comment="Enhance chat component with loading animations, improved message formatting, and collapsible table functionality. Update package dependencies for remark-gfm and related markdown utilities. Refactor context handling for message sending and loading states.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/api/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Chat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChatContainer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChatContainer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/LeftNav.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LeftNav.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/Context.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/Context.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,6 +54,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
@@ -133,6 +130,8 @@
       <workItem from="1749650179531" duration="16000" />
       <workItem from="1749650274839" duration="624000" />
       <workItem from="1752830643769" duration="7360000" />
+      <workItem from="1753112493724" duration="1198000" />
+      <workItem from="1753357497484" duration="2172000" />
     </task>
     <task id="LOCAL-00001" summary="update readme and env">
       <option name="closed" value="true" />
@@ -334,7 +333,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746717844739</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Enhance chat component with loading animations, improved message formatting, and collapsible table functionality. Update package dependencies for remark-gfm and related markdown utilities. Refactor context handling for message sending and loading states.">
+      <option name="closed" value="true" />
+      <created>1753113042288</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1753113042288</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -376,7 +383,8 @@
     <MESSAGE value="Refactor chat API endpoint and add token-based authorization&#10;&#10;Updated the chat API endpoint to use the new server URL and added token-based authorization using Bearer tokens from cookies. Also included a request body to enable creating a new chat with a default" />
     <MESSAGE value="fix dropdown with agent selection" />
     <MESSAGE value="change number of items per page" />
-    <option name="LAST_COMMIT_MESSAGE" value="change number of items per page" />
+    <MESSAGE value="Enhance chat component with loading animations, improved message formatting, and collapsible table functionality. Update package dependencies for remark-gfm and related markdown utilities. Refactor context handling for message sending and loading states." />
+    <option name="LAST_COMMIT_MESSAGE" value="Enhance chat component with loading animations, improved message formatting, and collapsible table functionality. Update package dependencies for remark-gfm and related markdown utilities. Refactor context handling for message sending and loading states." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
